@@ -57,4 +57,5 @@ __main__.py | file loaded to run the game
 	-	sprites
 
 game.py | main game loop
+
 utils.py | helper functions
