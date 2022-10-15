@@ -1,10 +1,15 @@
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 15th 2022
 # version = '1.0'
 #------------------------------------------------------------------------------
-import os
+"""
+This module contains the main logic of the game and is what will be imported 
+by the __main__ file.
+"""
+#------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
 #------------------------------------------------------------------------------
 import pygame
@@ -20,11 +25,12 @@ class NeverEndingCircles:
             pygame.display.Info().current_h
             )
         self.screen = pygame.display.set_mode(
-            (0, 0), 
+            self.monitorSize, 
             pygame.FULLSCREEN
             )
-        # Run game
-        self.mainLoop()
+        # Initialize the clock
+        self.clock = pygame.time.Clock()
+        self.FPS = 60
 
     def mainLoop(self):
         while True:
@@ -33,7 +39,8 @@ class NeverEndingCircles:
                     pygame.quit()
                     exit()
 
-            # Update display window
             pygame.display.update()
 
-NeverEndingCircles()
+            self.clock.tick(self.FPS)
+
+NeverEndingCircles().mainLoop()

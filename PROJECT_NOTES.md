@@ -46,9 +46,10 @@ Tech Demo
 -	3pm - 4pm
 -	8pm - 10pm
 Learning pygame, proper object and file structure, etc
--	10:45am - 
-Writing code
--	12:15pn
+-	10:45am - 12:15pm
+-	2:30pm
+Writing code while learning pygame
+-	12:15pm - 12:30pm
 
 
 
