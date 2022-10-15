@@ -1,0 +1,49 @@
+# Notes:
+-	Cite everything
+-	Keep track of time spent on project and enter timesheet form, 
+	this is for each checkpoint (TP1, TP2, TP3)
+-	Include library in the project file
+-	Note down any changes, design modifications, and progress on the 
+	project
+
+
+
+# To Do:
+Project Proposal
+-	Structural Plan
+-	Algorithmic Plan
+Timesheet
+
+
+
+# Features to Add:
+TP 1
+- 	Start countdown
+- 
+TP 2
+- 	Score based on how on time the player is - Perfect multiplier
+- 	Stats - Progress through level
+- 	Pop up state - "Perfect", "Early", "Late"
+TP 3
+- 	Speed up multiplier that increases score multiplier
+- 	Invincible mode
+- 	Online Leaderboard
+-	Level Editor
+-	AI creating levels when given a sound file
+
+
+
+# Time Track:
+Project Proposal
+-	8pm - 11pm
+
+Competitive Analysis
+-	9pm - 9:40pm
+Tech Demo
+-	3pm - 4pm
+-	8pm - 10pm
+Learning pygame, proper object and file structure
+-	10:45am - 
+
+
+
