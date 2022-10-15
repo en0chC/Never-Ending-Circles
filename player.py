@@ -6,7 +6,7 @@
 # version = '1.0'
 #------------------------------------------------------------------------------
 """
-This module contains the player sprite. The player class takes type, 
+This module contains the Player sprite. The player class takes type, 
 windowSize, FPS and RPS as parameters. Type determines whether it is the blue 
 or red circle, windowSize is the size of the display window, FPS is the frames 
 per second and RPS is the rotations per second.
@@ -33,9 +33,8 @@ class Player(pygame.sprite.Sprite):
                 center=(windowSize[0] // 2 - 100, windowSize[1] // 2))
             self.moveState = "Move"
             self.angle = (3/2)*math.pi
-            self.circMotionCenter = (
-                windowSize[0] // 2, 
-                windowSize[1] // 2)
+            self.circMotionCenter = (windowSize[0] // 2, 
+            windowSize[1] // 2)
         else:
             self.image = pygame.image.load(
                 "assets/images/orange_circle.png").convert_alpha()
@@ -43,9 +42,8 @@ class Player(pygame.sprite.Sprite):
                 center=(windowSize[0] // 2, windowSize[1] // 2))
             self.moveState = "Fixed"
             self.angle = (1/2)*math.pi
-            self.circMotionCenter = (
-                windowSize[0] // 2 - 100, 
-                windowSize[1] // 2)
+            self.circMotionCenter = (windowSize[0] // 2 - 100, 
+            windowSize[1] // 2)
         # Set up mask for collision detection
         self.mask = pygame.mask.from_surface(self.image)
 
