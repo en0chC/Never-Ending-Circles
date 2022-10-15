@@ -11,6 +11,7 @@ by the __main__ file.
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
+from time import sleep # Used for counting down the start of the game
 #------------------------------------------------------------------------------
 import pygame
 #------------------------------------------------------------------------------
@@ -33,10 +34,12 @@ class NeverEndingCircles:
         # Initialize the clock
         self.clock = pygame.time.Clock()
         self.FPS = 60
-        # Set up player group
+        # Set up players and player group
         self.player = pygame.sprite.Group()
-        self.player.add(Player("Blue", "Move", self.monitorSize))
-        self.player.add(Player("Orange", "Fixed", self.monitorSize))
+        self.player.add(Player("Blue", self.monitorSize, self.FPS, 1))
+        self.player.add(Player("Orange", self.monitorSize, self.FPS, 1))
+        # Set up game state
+        self.gameState = "Countdown"
 
     def mainLoop(self):
         while True:
@@ -50,15 +53,23 @@ class NeverEndingCircles:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
-            
-            # Player movement
-            # Get blue and orange circles
-            blue = self.player.sprites()[0]
-            orange = self.player.sprites()[1]
 
-            # Draw players onto screen
-            self.player.draw(self.screen)
-            self.player.update()
+            # Game is running
+            if self.gameState == "Running":
+                # Draw players onto screen
+                self.player.draw(self.screen)
+                self.player.update()
+                # Update the center of circular motion of both circles
+                self.player.sprites()[0].updateCircMotionCenter(
+                    self.player.sprites()[1])
+                self.player.sprites()[1].updateCircMotionCenter(
+                    self.player.sprites()[0])
+            # Countdown before the game starts
+            elif self.gameState == "Countdown":
+                self.player.draw(self.screen)
+                pygame.display.update()
+                sleep(3)
+                self.gameState = "Running"
 
             pygame.display.update()
             self.clock.tick(self.FPS)

@@ -12,6 +12,9 @@
 Project Proposal
 -	Structural Plan
 -	Algorithmic Plan
+	-	Circular motion
+		-	Equation for circular motion
+		-	Updating the starting position for circular motion of other circle
 Timesheet
 
 
