@@ -52,7 +52,9 @@ Learning pygame, proper object and file structure
 
 # File Structure
 __main__.py | file loaded to run the game
+
 -	assets
 	-	sprites
+
 game.py | main game loop
 utils.py | helper functions
