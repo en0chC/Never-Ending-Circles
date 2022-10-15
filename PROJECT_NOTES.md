@@ -19,11 +19,14 @@ Timesheet
 # Features to Add:
 TP 1
 - 	Start countdown
-- 
+
+
 TP 2
 - 	Score based on how on time the player is - Perfect multiplier
 - 	Stats - Progress through level
 - 	Pop up state - "Perfect", "Early", "Late"
+
+
 TP 3
 - 	Speed up multiplier that increases score multiplier
 - 	Invincible mode
