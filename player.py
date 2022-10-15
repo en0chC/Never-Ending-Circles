@@ -9,7 +9,7 @@
 This module contains the player sprite. The player class takes type, 
 windowSize, FPS and RPS as parameters. Type determines whether it is the blue 
 or red circle, windowSize is the size of the display window, FPS is the frames 
-per second and RPS is the rotations per second
+per second and RPS is the rotations per second.
 """
 #------------------------------------------------------------------------------
 import math # Used for circular motion of circles
@@ -44,8 +44,7 @@ class Player(pygame.sprite.Sprite):
             self.circMotionCenter = \
                 (windowSize[0] // 2 - 100, windowSize[1] // 2)
 
-
-        
+    # Moves the circle in circular motion
     def move(self):
         if self.moveState == "Move":
             radius = 100
@@ -58,9 +57,13 @@ class Player(pygame.sprite.Sprite):
                 (self.circMotionCenter[0] + (radius * math.sin(self.angle)),
                 self.circMotionCenter[1] + (radius * math.cos(self.angle)))
 
-    # Set the center of circular motion to the center of the other circle
+    # Set center of circular motion and starting position of fixed circle
     def updateCircMotionCenter(self, otherCircle):
-        self.circMotionCenter = otherCircle.rect.center
+        if self.moveState == "Fixed":
+            self.circMotionCenter = otherCircle.rect.center
+            # Set the starting position of circular motion to opposite
+            # the other circle's position
+            self.angle = (otherCircle.angle + math.pi) % (2*math.pi)
 
 
 

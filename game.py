@@ -11,7 +11,7 @@ by the __main__ file.
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
-from time import sleep # Used for counting down the start of the game
+from time import sleep # Used for the countdown at the start of the game
 #------------------------------------------------------------------------------
 import pygame
 #------------------------------------------------------------------------------
@@ -53,6 +53,20 @@ class NeverEndingCircles:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
+                    # Switch movement states of both circles
+                    if event.key == pygame.K_d:
+                        if (self.player.sprites()[0].moveState == "Move"):
+                            self.player.sprites()[0].moveState = "Fixed"
+                            self.player.sprites()[1].moveState = "Move"
+                        else:
+                            self.player.sprites()[0].moveState = "Move"
+                            self.player.sprites()[1].moveState = "Fixed"
+                    # Rotate direction of circular motion
+                    if event.key == pygame.K_r:
+                        self.player.sprites()[0].rotationPerSecond = \
+                        -(self.player.sprites()[0].rotationPerSecond)
+                        self.player.sprites()[1].rotationPerSecond = \
+                        -(self.player.sprites()[1].rotationPerSecond)
 
             # Game is running
             if self.gameState == "Running":
