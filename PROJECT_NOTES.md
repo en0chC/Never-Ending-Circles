@@ -45,8 +45,10 @@ Competitive Analysis
 Tech Demo
 -	3pm - 4pm
 -	8pm - 10pm
-Learning pygame, proper object and file structure
+Learning pygame, proper object and file structure, etc
 -	10:45am - 
+Writing code
+-	12:15pn
 
 
 
