@@ -15,6 +15,9 @@ Project Proposal
 	-	Circular motion
 		-	Equation for circular motion
 		-	Updating the starting position for circular motion of other circle
+		-	Updating angle of circles when other circle snaps onto tile
+	-	Level layout
+		-	Tiled approach to level layout using 2d array
 Timesheet
 
 

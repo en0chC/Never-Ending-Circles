@@ -6,7 +6,7 @@
 # version = '1.0'
 #------------------------------------------------------------------------------
 """
-This module is the python file that will be run when starting the game.
+This module is the python file that will be run to starting the game.
 """
 #------------------------------------------------------------------------------
 from game import NeverEndingCircles
