@@ -56,7 +56,7 @@ Learning pygame, proper object and file structure, etc
 -	2:30pm - 5:00pm
 Writing code while learning pygame
 -	12:15pm - 12:30pm
--	5:00pm - 
+-	5:00pm - 12:00 om
 
 
 # File Structure
