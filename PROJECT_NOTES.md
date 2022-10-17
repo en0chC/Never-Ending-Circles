@@ -45,7 +45,7 @@ TP 3
 # Time Track:
 Project Proposal
 -	8pm - 11pm
-
+-	7:30pm - 8:30pm
 Competitive Analysis
 -	9pm - 9:40pm
 Tech Demo
@@ -54,10 +54,10 @@ Tech Demo
 Learning pygame, proper object and file structure, etc
 -	10:45am - 12:15pm
 -	2:30pm - 5:00pm
-Writing code while learning pygame
+Writing code (With some time spent learning more pygame functions)
 -	12:15pm - 12:30pm
--	5:00pm - 12:00 om
-
+-	5:00pm - 12:00pm
+-	9:00pm - 
 
 # File Structure
 __main__.py | file loaded to run the game

@@ -12,9 +12,11 @@ This module contains the Camera class.
 import pygame
 
 class Camera:
-    def __init__(self, player, windowSize):
-        vec = pygame.math.Vector2
-        self.player = player
-        self.offset = vec(0, 0)
-        self.offsetFloat = vec(0, 0)
-        self.windowSize = windowSize
+    def __init__(self, windowSize):
+        self.wndSize = windowSize
+        self.offset = pygame.math.Vector2(0, 0)
+
+    def follow(self, player):
+        if player.moveState == "Move":
+            self.offset.x += player.rect.x - self.offset.x
+            self.offset.y += player.rect.y - self.offset.y

@@ -17,21 +17,18 @@ import pygame
 #------------------------------------------------------------------------------
 from player import Player
 from tile import Tile
+from camera import Camera
 
 class NeverEndingCircles:
     def __init__(self):
         # Initialize pygame and set title of the display window
         pygame.init()
         pygame.display.set_caption("Never Ending Circles")
-        # Set up display window
+        # Set up display window to fullscreen
         self.monitorSize = (
-            pygame.display.Info().current_w, 
-            pygame.display.Info().current_h
-            )
+            pygame.display.Info().current_w, pygame.display.Info().current_h)
         self.screen = pygame.display.set_mode(
-            self.monitorSize,
-            pygame.FULLSCREEN
-            )
+            self.monitorSize, pygame.FULLSCREEN)
         # Initialize the clock
         self.clock = pygame.time.Clock()
         self.FPS = 60
@@ -39,7 +36,12 @@ class NeverEndingCircles:
         self.player = pygame.sprite.Group()
         self.player.add(Player("Blue", self.monitorSize, self.FPS, 1))
         self.player.add(Player("Orange", self.monitorSize, self.FPS, 1))
-        # Set up test tiles and tiles group
+        # Set up camera
+        self.camera = Camera(self.monitorSize)
+        # Set up game state
+        self.gameState = "Countdown"
+
+        # Set up test tiles and tiles group (TEMPORARY)
         self.tiles = pygame.sprite.Group()
         self.tiles.add(Tile(self.monitorSize, (0, 0)))
         self.tiles.add(Tile(self.monitorSize, (100, 0)))
@@ -52,12 +54,9 @@ class NeverEndingCircles:
         self.tiles.add(Tile(self.monitorSize, (800, 0)))
         self.tiles.add(Tile(self.monitorSize, (900, 0)))
         self.nextTileIndex = 1
-        # Set up game state
-        self.gameState = "Countdown"
 
     def mainLoop(self):
         while True:
-            self.screen.fill("white")
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -67,67 +66,57 @@ class NeverEndingCircles:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
-                    # Rotate direction of circular motion
-                    if event.key == pygame.K_r and self.gameState == "Running":
-                        self.player.sprites()[0].rotationPerSecond = \
-                        -(self.player.sprites()[0].rotationPerSecond)
-                        self.player.sprites()[1].rotationPerSecond = \
-                        -(self.player.sprites()[1].rotationPerSecond)
 
-            # Draw tiles on display window
+            self.camera.follow(self.player.sprites()[0])
+            self.camera.follow(self.player.sprites()[1])
+
+            # Fill background and blit tiles on display window
+            self.screen.fill("white")
             self.tiles.draw(self.screen)
+
+            # Draw players onto screen and update players' properties
+            self.player.draw(self.screen)
+            self.player.sprites()[0].update(self.player.sprites()[1])
+            self.player.sprites()[1].update(self.player.sprites()[0])
             # Game is running
             if self.gameState == "Running":
-                # Draw players onto screen
-                self.player.draw(self.screen)
-                self.player.update()
-
-                # Update the center of circular motion of both circles
-                self.player.sprites()[0].updateCircMotionCenter(
-                    self.player.sprites()[1])
-                self.player.sprites()[1].updateCircMotionCenter(
-                    self.player.sprites()[0])
-
-                # Get keys being pressed
-                keys = pygame.key.get_pressed()
-                nextTile = self.tiles.sprites()[self.nextTileIndex]
-                # If circle and tile masks colliding, circle is moving and
-                # f key being pressed, snap the circle to the tile
-                if pygame.sprite.collide_mask(self.player.sprites()[0], 
-                nextTile) and self.player.sprites()[0].moveState == "Move" \
-                and keys[pygame.K_f]:
-                    self.player.sprites()[0].snapToTile(nextTile)
-                    self.player.sprites()[1].updateCircMotionCenter(
-                    self.player.sprites()[0])
-                    self.player.sprites()[1].moveState = "Move"
-                    self.nextTileIndex += 1
-                elif pygame.sprite.collide_mask(self.player.sprites()[1], 
-                nextTile) and self.player.sprites()[1].moveState == "Move" \
-                and keys[pygame.K_f]:
-                    self.player.sprites()[1].snapToTile(nextTile)
-                    self.player.sprites()[0].updateCircMotionCenter(
-                    self.player.sprites()[1])
-                    self.player.sprites()[0].moveState = "Move"
-                    self.nextTileIndex += 1
-
-                # Once final tile is reached, set game state to idle
-                if self.nextTileIndex == len(self.tiles.sprites()):
-                    self.gameState = "Idle"
-                
-            # Countdown before the game starts
+                self.running()
+            # 3 second countdown before the game starts
             elif self.gameState == "Countdown":
-                self.player.draw(self.screen)
-                pygame.display.update()
-                sleep(3)
-                self.gameState = "Running"
-
+                if pygame.time.get_ticks() >= 3000:
+                    self.gameState = "Running"
             elif self.gameState == "Idle":
-                # Draw players onto screen
-                self.player.draw(self.screen)
-                self.player.update()
-
+                pass
 
             pygame.display.update()
             self.clock.tick(self.FPS)
+
+    def running(self):
+        # Get blue circle and orange circle sprites
+        blueCircle = self.player.sprites()[0]
+        orangeCircle = self.player.sprites()[1]
+
+        # Get keys being pressed
+        keys = pygame.key.get_pressed()
+        nextTile = self.tiles.sprites()[self.nextTileIndex]
+
+        # If circle and tile masks colliding, circle is moving and
+        # f key being pressed, snap the circle to the tile
+        if pygame.sprite.collide_mask(blueCircle, nextTile) and \
+        blueCircle.moveState == "Move" and keys[pygame.K_f]:
+            blueCircle.snapToTile(nextTile)
+            orangeCircle.update(blueCircle)
+            orangeCircle.moveState = "Move"
+            self.nextTileIndex += 1
+        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
+        orangeCircle.moveState == "Move" and keys[pygame.K_f]:
+            orangeCircle.snapToTile(nextTile)
+            blueCircle.update(orangeCircle)
+            blueCircle.moveState = "Move"
+            self.nextTileIndex += 1
+
+        # Once final tile is reached, set game state to idle
+        if self.nextTileIndex == len(self.tiles.sprites()):
+            self.gameState = "Idle"
 
 NeverEndingCircles().mainLoop()
