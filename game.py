@@ -77,15 +77,17 @@ class NeverEndingCircles:
                 self.player.sprites()[1].rect.center != self.wndCenter:
                     sprite.rect.x -= self.camera.offset.x
                     sprite.rect.y -= self.camera.offset.y
+                    print(sprite.rect.center)
             self.tiles.draw(self.screen)
 
+            """
             for sprite in self.player.sprites():
                 if sprite.moveState == "Fixed" and \
                 sprite.rect.center != self.wndCenter:
                     sprite.rect.x -= self.camera.offset.x
                     sprite.rect.y -= self.camera.offset.y
-
             """
+
             for sprite in self.player.sprites():
                 if sprite.moveState == "Fixed" and \
                 sprite.rect.centerx - self.wndSize[0]//2 <= 5 and \
@@ -95,7 +97,7 @@ class NeverEndingCircles:
                 sprite.rect.center != self.wndCenter:
                     sprite.rect.x -= self.camera.offset.x
                     sprite.rect.y -= self.camera.offset.y
-            """
+            
 
             # Draw players onto screen and update players' properties
             self.player.draw(self.screen)
