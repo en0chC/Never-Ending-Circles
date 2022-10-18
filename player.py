@@ -58,7 +58,7 @@ class Player(pygame.sprite.Sprite):
             if self.angle <= 0:
                 self.angle = 2*math.pi
             else:
-                # Circular motion
+                # Uniform circular motion
                 self.rect.center = \
                 (self.circMotionCenter[0] + (self.radius*math.sin(self.angle)),
                 self.circMotionCenter[1] + (self.radius*math.cos(self.angle)))
@@ -77,8 +77,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = nextTile.rect.center
         self.moveState = "Fixed"
 
-    # Set center of circular motion and 
-    # starting position of the circular motion of fixed circle
+    # For the fixed player, update center of circular motion and 
+    # starting position of the circular motion relative to moving circle
     def updateCircularMotionCenter(self, otherCircle):
         if self.moveState == "Fixed":
             self.circMotionCenter = otherCircle.rect.center

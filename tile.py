@@ -12,7 +12,6 @@ This module contains the Tile sprite.
 import pygame
 
 class Tile(pygame.sprite.Sprite):
-    # pos is TEMPORARY
     def __init__(self, windowSize, pos):
         super().__init__()
         # Set up tile image and rect

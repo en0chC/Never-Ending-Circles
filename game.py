@@ -11,7 +11,6 @@ by the __main__ file.
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
-from time import sleep # Used for the countdown at the start of the game
 #------------------------------------------------------------------------------
 import pygame
 #------------------------------------------------------------------------------
@@ -36,12 +35,13 @@ class NeverEndingCircles:
         self.player = pygame.sprite.Group()
         self.player.add(Player("Blue", self.monitorSize, self.FPS, 1))
         self.player.add(Player("Orange", self.monitorSize, self.FPS, 1))
-        # Set up camera
+        # Set up camera (Doesn't do anything yet)
         self.camera = Camera(self.monitorSize)
         # Set up game state
         self.gameState = "Countdown"
 
-        # Set up test tiles and tiles group (TEMPORARY)
+        # Set up test tiles and tiles group (TEMPORARY - Here for testing
+        # purposes only)
         self.tiles = pygame.sprite.Group()
         self.tiles.add(Tile(self.monitorSize, (0, 0)))
         self.tiles.add(Tile(self.monitorSize, (100, 0)))
@@ -53,6 +53,7 @@ class NeverEndingCircles:
         self.tiles.add(Tile(self.monitorSize, (700, 0)))
         self.tiles.add(Tile(self.monitorSize, (800, 0)))
         self.tiles.add(Tile(self.monitorSize, (900, 0)))
+        # Keep track of the next tile in the path to move onto
         self.nextTileIndex = 1
 
     def mainLoop(self):
@@ -67,13 +68,13 @@ class NeverEndingCircles:
                         pygame.quit()
                         exit()
 
+            # Doesn't do anything for now
             self.camera.follow(self.player.sprites()[0])
             self.camera.follow(self.player.sprites()[1])
 
             # Fill background and blit tiles on display window
             self.screen.fill("white")
             self.tiles.draw(self.screen)
-
             # Draw players onto screen and update players' properties
             self.player.draw(self.screen)
             self.player.sprites()[0].update(self.player.sprites()[1])
@@ -101,9 +102,11 @@ class NeverEndingCircles:
         nextTile = self.tiles.sprites()[self.nextTileIndex]
 
         # If circle and tile masks colliding, circle is moving and
-        # f key being pressed, snap the circle to the tile
+        # f key being pressed
         if pygame.sprite.collide_mask(blueCircle, nextTile) and \
         blueCircle.moveState == "Move" and keys[pygame.K_f]:
+            # Snap circle to tile, update the center of circular motion of 
+            # other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
             orangeCircle.update(blueCircle)
             orangeCircle.moveState = "Move"
@@ -119,4 +122,5 @@ class NeverEndingCircles:
         if self.nextTileIndex == len(self.tiles.sprites()):
             self.gameState = "Idle"
 
-NeverEndingCircles().mainLoop()
+if __name__ == "__main__":
+    NeverEndingCircles().mainLoop()

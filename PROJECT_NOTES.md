@@ -9,16 +9,7 @@
 
 
 # To Do:
-Project Proposal
--	Structural Plan
--	Algorithmic Plan
-	-	Circular motion
-		-	Equation for circular motion
-		-	Updating the starting position for circular motion of other circle
-		-	Updating angle of circles when other circle snaps onto tile
-	-	Level layout
-		-	Tiled approach to level layout using 2d array
-Timesheet
+- Fix Camera Class
 
 
 
@@ -37,8 +28,8 @@ TP 3
 - 	Speed up multiplier that increases score multiplier
 - 	Invincible mode
 - 	Online Leaderboard
--	Level Editor
--	AI creating levels when given a sound file
+-	Level Editor (If time allows)
+-	AI creating levels when given a sound file (If time allows)
 
 
 
@@ -57,7 +48,9 @@ Learning pygame, proper object and file structure, etc
 Writing code (With some time spent learning more pygame functions)
 -	12:15pm - 12:30pm
 -	5:00pm - 12:00pm
--	9:00pm - 
+-	9:00pm - 12:00pm
+
+
 
 # File Structure
 __main__.py | file loaded to run the game
