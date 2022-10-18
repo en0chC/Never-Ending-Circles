@@ -80,8 +80,8 @@ class Player(pygame.sprite.Sprite):
     # For the fixed player, update center of circular motion and 
     # starting position of the circular motion relative to moving circle
     def updateCircularMotionCenter(self, otherCircle):
+        self.circMotionCenter = otherCircle.rect.center
         if self.moveState == "Fixed":
-            self.circMotionCenter = otherCircle.rect.center
             # Set the starting circular position of fixed circle to opposite
             # the other circle's circular position
             self.angle = (otherCircle.angle + math.pi) % (2*math.pi)

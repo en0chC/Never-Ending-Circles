@@ -24,36 +24,35 @@ class NeverEndingCircles:
         pygame.init()
         pygame.display.set_caption("Never Ending Circles")
         # Set up display window to fullscreen
-        self.monitorSize = (
+        self.wndSize = (
             pygame.display.Info().current_w, pygame.display.Info().current_h)
+        self.wndCenter = (self.wndSize[0]//2, self.wndSize[1]//2)
         self.screen = pygame.display.set_mode(
-            self.monitorSize, pygame.FULLSCREEN)
+            self.wndSize, pygame.FULLSCREEN)
         # Initialize the clock
         self.clock = pygame.time.Clock()
         self.FPS = 60
         # Set up players and player group
         self.player = pygame.sprite.Group()
-        self.player.add(Player("Blue", self.monitorSize, self.FPS, 1))
-        self.player.add(Player("Orange", self.monitorSize, self.FPS, 1))
-        # Set up camera (Doesn't do anything yet)
-        self.camera = Camera(self.monitorSize)
+        self.player.add(Player("Blue", self.wndSize, self.FPS, 1))
+        self.player.add(Player("Orange", self.wndSize, self.FPS, 1))
+        # Set up camera
+        self.camera = Camera(self.wndSize)
         # Set up game state
         self.gameState = "Countdown"
 
-        # Set up test tiles and tiles group (TEMPORARY - Here for testing
-        # purposes only)
+        # Set up test tiles and tiles group (TEMPORARY)
         self.tiles = pygame.sprite.Group()
-        self.tiles.add(Tile(self.monitorSize, (0, 0)))
-        self.tiles.add(Tile(self.monitorSize, (100, 0)))
-        self.tiles.add(Tile(self.monitorSize, (200, 0)))
-        self.tiles.add(Tile(self.monitorSize, (300, 0)))
-        self.tiles.add(Tile(self.monitorSize, (400, 0)))
-        self.tiles.add(Tile(self.monitorSize, (500, 0)))
-        self.tiles.add(Tile(self.monitorSize, (600, 0)))
-        self.tiles.add(Tile(self.monitorSize, (700, 0)))
-        self.tiles.add(Tile(self.monitorSize, (800, 0)))
-        self.tiles.add(Tile(self.monitorSize, (900, 0)))
-        # Keep track of the next tile in the path to move onto
+        self.tiles.add(Tile(self.wndSize, (0, 0)))
+        self.tiles.add(Tile(self.wndSize, (100, 0)))
+        self.tiles.add(Tile(self.wndSize, (200, 0)))
+        self.tiles.add(Tile(self.wndSize, (300, 0)))
+        self.tiles.add(Tile(self.wndSize, (400, 0)))
+        self.tiles.add(Tile(self.wndSize, (500, 0)))
+        self.tiles.add(Tile(self.wndSize, (600, 0)))
+        self.tiles.add(Tile(self.wndSize, (700, 0)))
+        self.tiles.add(Tile(self.wndSize, (800, 0)))
+        self.tiles.add(Tile(self.wndSize, (900, 0)))
         self.nextTileIndex = 1
 
     def mainLoop(self):
@@ -67,14 +66,37 @@ class NeverEndingCircles:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
-
-            # Doesn't do anything for now
-            self.camera.follow(self.player.sprites()[0])
-            self.camera.follow(self.player.sprites()[1])
+            
+            self.camera.centerCam(self.player.sprites()[0])
+            self.camera.centerCam(self.player.sprites()[1])
 
             # Fill background and blit tiles on display window
             self.screen.fill("white")
+            for sprite in self.tiles.sprites():
+                if self.player.sprites()[0].rect.center != self.wndCenter and \
+                self.player.sprites()[1].rect.center != self.wndCenter:
+                    sprite.rect.x -= self.camera.offset.x
+                    sprite.rect.y -= self.camera.offset.y
             self.tiles.draw(self.screen)
+
+            for sprite in self.player.sprites():
+                if sprite.moveState == "Fixed" and \
+                sprite.rect.center != self.wndCenter:
+                    sprite.rect.x -= self.camera.offset.x
+                    sprite.rect.y -= self.camera.offset.y
+
+            """
+            for sprite in self.player.sprites():
+                if sprite.moveState == "Fixed" and \
+                sprite.rect.centerx - self.wndSize[0]//2 <= 5 and \
+                sprite.rect.centery - self.wndSize[1]//2 <= 5:
+                    sprite.rect.center = self.wndCenter
+                elif sprite.moveState == "Fixed" and \
+                sprite.rect.center != self.wndCenter:
+                    sprite.rect.x -= self.camera.offset.x
+                    sprite.rect.y -= self.camera.offset.y
+            """
+
             # Draw players onto screen and update players' properties
             self.player.draw(self.screen)
             self.player.sprites()[0].update(self.player.sprites()[1])
@@ -108,12 +130,16 @@ class NeverEndingCircles:
             # Snap circle to tile, update the center of circular motion of 
             # other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
+            # Update camera offset
+            self.camera.centerCam(blueCircle)
             orangeCircle.update(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
         elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
         orangeCircle.moveState == "Move" and keys[pygame.K_f]:
             orangeCircle.snapToTile(nextTile)
+            # Update camera offset
+            self.camera.centerCam(orangeCircle)
             blueCircle.update(orangeCircle)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
