@@ -24,7 +24,8 @@ class Camera:
         if player.moveState == "Fixed" and \
         ((player.rect.center[0] - self.wndCenter[0])**2 
         + (player.rect.center[1] - self.wndCenter[1])**2)**(1/2) == 100:
-            self.deltax = player.rect.center[0] - self.wndCenter[0]
-            self.deltay = player.rect.center[1] - self.wndCenter[1]
+            print(player.angle)
+            self.deltax = player.rect.center[0] - self.wndCenter[0] / 10
+            self.deltay = player.rect.center[1] - self.wndCenter[1] / 10
             self.offset.x = self.deltax / 10
             self.offset.y = self.deltay / 10

@@ -77,7 +77,6 @@ class NeverEndingCircles:
                 self.player.sprites()[1].rect.center != self.wndCenter:
                     sprite.rect.x -= self.camera.offset.x
                     sprite.rect.y -= self.camera.offset.y
-                    print(sprite.rect.center)
             self.tiles.draw(self.screen)
 
             """
