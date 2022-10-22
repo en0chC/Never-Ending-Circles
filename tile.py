@@ -13,17 +13,14 @@ import pygame
 
 class Tile(pygame.sprite.Sprite):
     # pos is TEMPORARY
-    def __init__(self, windowSize, pos):
+    def __init__(self, wndCenter, pos, tileType):
         super().__init__()
         # Set up tile image and rect
         self.image = pygame.image.load(
-            "assets/images/StoN.png").convert_alpha()
-            
-        # TEMPORARY
-        self.image = pygame.transform.rotate(self.image, 90)
+            "assets/images/" + tileType + ".png").convert_alpha()
 
         self.rect = self.image.get_rect(
-            center=(windowSize[0]//2 + pos[0], windowSize[1]//2 + pos[1]))
+            center=(wndCenter[0] + pos[0], wndCenter[1] + pos[1]))
         self.offset = pygame.math.Vector2()
         # Set up mask for collision detection
         self.mask = pygame.mask.from_surface(self.image)

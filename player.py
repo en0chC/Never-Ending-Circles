@@ -17,7 +17,7 @@ import math # Used for circular motion of circles
 import pygame
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, type, windowSize, FPS, RPS):
+    def __init__(self, type, windowSize, FPS, BPM):
         super().__init__()
         # Set up blue or orange circle image, rect, moveState, angle and
         # center of circular motion
@@ -43,8 +43,9 @@ class Player(pygame.sprite.Sprite):
             self.circMotionCenter = (windowSize[0]//2 + 100, windowSize[1]//2)
         self.radius = 100
         # (2*math.pi)/FPS to make full rotation in 1 second
+        # Around 1 rotation for 100 BPM
         # Positive rotationPerSecond is clockwise rotation
-        self.rotationPerSecond = ((2*math.pi)/(FPS)) * RPS
+        self.rotationPerSecond = ((2*math.pi)/(FPS)) * (BPM/100)
         # Set up mask for collision detection
         self.mask = pygame.mask.from_surface(self.image)
         
