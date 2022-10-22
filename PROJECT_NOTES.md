@@ -50,8 +50,8 @@ Writing code (With some time spent learning more pygame functions)
 -	5:00pm - 12:00pm
 -	9:00pm - 12:00pm
 TP2:
-Tile Desing
--	11:30am - 
+Tile Design
+-	11:30am - 1:30pm
 
 
 
