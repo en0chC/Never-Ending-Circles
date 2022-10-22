@@ -66,38 +66,11 @@ class NeverEndingCircles:
                     if event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         exit()
-            
-            self.camera.centerCam(self.player.sprites()[0])
-            self.camera.centerCam(self.player.sprites()[1])
 
             # Fill background and blit tiles on display window
             self.screen.fill("white")
-            for sprite in self.tiles.sprites():
-                if self.player.sprites()[0].rect.center != self.wndCenter and \
-                self.player.sprites()[1].rect.center != self.wndCenter:
-                    sprite.rect.x -= self.camera.offset.x
-                    sprite.rect.y -= self.camera.offset.y
             self.tiles.draw(self.screen)
-
-            """
-            for sprite in self.player.sprites():
-                if sprite.moveState == "Fixed" and \
-                sprite.rect.center != self.wndCenter:
-                    sprite.rect.x -= self.camera.offset.x
-                    sprite.rect.y -= self.camera.offset.y
-            """
-
-            for sprite in self.player.sprites():
-                if sprite.moveState == "Fixed" and \
-                sprite.rect.centerx - self.wndSize[0]//2 <= 5 and \
-                sprite.rect.centery - self.wndSize[1]//2 <= 5:
-                    sprite.rect.center = self.wndCenter
-                elif sprite.moveState == "Fixed" and \
-                sprite.rect.center != self.wndCenter:
-                    sprite.rect.x -= self.camera.offset.x
-                    sprite.rect.y -= self.camera.offset.y
             
-
             # Draw players onto screen and update players' properties
             self.player.draw(self.screen)
             self.player.sprites()[0].update(self.player.sprites()[1])
@@ -114,6 +87,8 @@ class NeverEndingCircles:
 
             pygame.display.update()
             self.clock.tick(self.FPS)
+
+
 
     def running(self):
         # Get blue circle and orange circle sprites
@@ -145,9 +120,23 @@ class NeverEndingCircles:
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
 
+
+        # Update camera offset and move sprites appropriately
+        for sprite in self.player.sprites():
+            if sprite.moveState == "Fixed" and \
+            sprite.rect.center != self.wndCenter:
+                sprite.rect.center = self.wndCenter
+
+                for tile in self.tiles.sprites():
+                    tile.rect.x -= self.camera.offset.x
+                    tile.rect.y -= self.camera.offset.y
+
+
         # Once final tile is reached, set game state to idle
         if self.nextTileIndex == len(self.tiles.sprites()):
             self.gameState = "Idle"
+
+
 
 if __name__ == "__main__":
     NeverEndingCircles().mainLoop()
