@@ -7,10 +7,12 @@
 #------------------------------------------------------------------------------
 """
 This module contains the Levels class which contains the different levels in 
-the game.
+the game. Format of tiles in level array is '[Modifier][Number of tiles]
+[FromDirection]to[ToDirection]' If the modifier is S 'Change speed', format is 
+'[Modifier][Number of tiles][New BPM][FromDirection]to[ToDirection]'. The
+different modifiers are 'N' - 'Normal tile', 'S' - 'Change speed/BPM', 'R' - 
+'Reverse direction' and 'C' - 'Checkpoint tile'.
 """
-#------------------------------------------------------------------------------
-import pygame
 #------------------------------------------------------------------------------
 from tile import Tile
 
@@ -20,16 +22,17 @@ class Levels:
 
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.wav", 100,
-            "30WtoE", "01WtoS", "01NtoE", "14WtoE", "01WtoS", "01NtoE", 
-            "14WtoE", "01WtoS", "01NtoE", "14WtoE", "01WtoN", "01StoE", 
-            "14WtoE", "01WtoN", "01StoE", "12WtoE", "01WtoN", "01StoE", 
-            "01WtoN", "01StoE", "08WtoE", "01WtoS", "01NtoE", "01WtoS", 
-            "01NtoE", "01WtoS", "01NtoE", "01WtoS", "01NtoE", "12WtoE", 
-            "01WtoN", "01StoE", "01WtoN", "01StoE", "08WtoE", "01WtoS", 
-            "01NtoE", "01WtoS", "01NtoE", "02WtoE", "01WtoN", "01StoE", 
-            "07WtoE"
+            "assets/music/level1.wav", 113,
+            "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
+            "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
+            "N14WtoE", "N01WtoN", "N01StoE", "N12WtoE", "N01WtoN", "N01StoE", 
+            "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", "N01NtoE", "N01WtoS", 
+            "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N12WtoE", 
+            "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
+            "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", "N01WtoN", "N01StoE", 
+            "S01027WtoE", "N06WtoE"
         ]
+
         # Stores all the level arrays
         self.levels = [self.level1]
         # Current level corresponding to level's index in levels array
@@ -39,14 +42,27 @@ class Levels:
         # Create tiles sprite group
         tiles.empty()
         self.nextTileCenter = [0,0]
+        self.currentBPM = self.levels[self.currentLevel][1]
 
         # Go through each tile in level array
         for tile in self.levels[self.currentLevel][2:]:
-            for i in range(int(tile[0:2])):
-                tiles.add(Tile(self.wndCenter, self.nextTileCenter, tile[2:]))
+            for i in range(int(tile[1:3])):
+                # If normal tile
+                if tile[0] == "N":
+                    tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
+                    tile[3:], tile[0], self.currentBPM))
+                # If change speed tile
+                if tile[0] == "S":
+                    tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
+                    tile[6:], tile[0:6], self.currentBPM))
+                    self.currentBPM = int(tile[3:6])
+                # If reverse direction tile
+                if tile[0] == "R":
+                    tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
+                    tile[3:], tile[0], self.currentBPM))
 
-                # Get ending direction from tile and set next tile center to
-                # the next spot in corresponding direction
+                # Get ending direction from tile and set next tile center 
+                # to the next spot in corresponding direction
                 if tile.split("to")[1] == "N":
                     self.nextTileCenter[1] += -100
                 if tile.split("to")[1] == "E":

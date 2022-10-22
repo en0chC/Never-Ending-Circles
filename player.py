@@ -45,7 +45,8 @@ class Player(pygame.sprite.Sprite):
         # (2*math.pi)/FPS to make full rotation in 1 second
         # Around 1 rotation for 100 BPM
         # Positive rotationPerSecond is clockwise rotation
-        self.rotationPerSecond = ((2*math.pi)/(FPS)) * (BPM/100)
+        self.FPS = FPS
+        self.rotationPerSecond = ((2*math.pi)/(self.FPS)) * (BPM/100)
         # Set up mask for collision detection
         self.mask = pygame.mask.from_surface(self.image)
         
@@ -55,14 +56,11 @@ class Player(pygame.sprite.Sprite):
             # Clockwise movement by reducing angle
             # Anti-clockwise movement by increasing angle
             self.angle -= self.rotationPerSecond
-            # When angle reaches 0, full rotation has been made
-            if self.angle <= 0:
-                self.angle = 2*math.pi
-            else:
-                # Uniform circular motion
-                self.rect.center = \
-                (self.circMotionCenter[0] + (self.radius*math.sin(self.angle)),
-                self.circMotionCenter[1] + (self.radius*math.cos(self.angle)))
+
+            # Uniform circular motion
+            self.rect.center = \
+            (self.circMotionCenter[0] + (self.radius*math.sin(self.angle)),
+            self.circMotionCenter[1] + (self.radius*math.cos(self.angle)))
 
     # Snaps the moving circle to the next tile
     def snapToTile(self, nextTile):
@@ -85,7 +83,17 @@ class Player(pygame.sprite.Sprite):
         if self.moveState == "Fixed":
             # Set the starting circular position of fixed circle to opposite
             # the other circle's circular position
-            self.angle = (otherCircle.angle + math.pi) % (2*math.pi)
+            self.angle = (otherCircle.angle + math.pi)
+
+    # Update circle properties if there is a modifier tile
+    def modifierChanges(self, nextTile):
+        # If modifier tile is speed change
+        if nextTile.modifier == "S":
+            self.rotationPerSecond = (((2*math.pi)/(self.FPS)) 
+            * (nextTile.modifierBPM/100))
+        # If modifier tile is reverse direction
+        if nextTile.modifier == "R":
+            self.rotationPerSecond = -self.rotationPerSecond
 
     # Updates circular movement of circle
     def update(self, otherCircle):

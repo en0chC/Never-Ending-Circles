@@ -12,11 +12,8 @@ in the levels.
 #------------------------------------------------------------------------------
 import multiprocessing # Used to allow music be played while game is running
 #------------------------------------------------------------------------------
-import pygame
-#------------------------------------------------------------------------------
 from pydub import AudioSegment
 from pydub.playback import play
-from time import sleep
 
 class Music:
     def __init__(self, musicFile):
@@ -26,13 +23,12 @@ class Music:
         self.state = "paused"
         self.piece = AudioSegment.from_wav(musicFile) - 10
         # Start buffer for the countdown at the start of the level
-        startBuffer = AudioSegment.from_wav(musicFile)[0:2500] - 1000
+        startBuffer = AudioSegment.from_wav(musicFile)[0:2100] - 1000
         self.piece = startBuffer + self.piece
         self.music = multiprocessing.Process(target=play, args=(self.piece,))
 
     def stopMusic(self):
         self.music.terminate()
-        self.state = "paused"
 
     def startMusic(self):
         self.music.start()

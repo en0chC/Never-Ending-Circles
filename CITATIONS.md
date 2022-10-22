@@ -6,3 +6,6 @@ https://osu.ppy.sh/home
 
 # Level 1 Music
 A Dance of Fire and Ice OST - https://www.youtube.com/watch?v=roKDAZ82i_0
+
+# Fail Sound Effect
+A Dance of Fire and Ice - https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/

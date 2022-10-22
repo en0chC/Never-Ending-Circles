@@ -53,8 +53,20 @@ TP2:
 Tile Design
 -	11:30am - 1:30pm
 Writing code
--	1:30pm - 
+-	1:30pm - 11:00pm
 
+
+
+# TP2 Progress
+-	Added Center Snap Camera
+-	Added Level class
+	-	Takes array that contains formatted information on tiles
+		of the level and goes through each tile in sequence,
+		creating Tile class instances to set up the level
+-	Added Music class
+-	Added Speed Change and Reverse Direction tile modifiers
+-	Added fail state and sound effect
+-	Created all tile type images
 
 
 # File Structure
