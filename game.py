@@ -10,7 +10,6 @@ This module contains the main logic of the game and is what will be imported
 by the __main__ file.
 """
 #------------------------------------------------------------------------------
-from doctest import TestResults
 from sys import exit # Used to exit the game
 #------------------------------------------------------------------------------
 import pygame
