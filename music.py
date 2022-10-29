@@ -17,13 +17,11 @@ from pydub.playback import play
 
 class Music:
     def __init__(self, musicFile):
-        # Start playing background music
+        # Set up music
         self.musicFile = musicFile
-        # Music isn't playing so set state to puased
-        self.state = "paused"
         self.piece = AudioSegment.from_wav(musicFile) - 10
         # Start buffer for the countdown at the start of the level
-        startBuffer = AudioSegment.from_wav(musicFile)[0:2100] - 1000
+        startBuffer = AudioSegment.from_wav(musicFile)[0:2600] - 1000
         self.piece = startBuffer + self.piece
         self.music = multiprocessing.Process(target=play, args=(self.piece,))
 
@@ -32,4 +30,9 @@ class Music:
 
     def startMusic(self):
         self.music.start()
-        self.state = "playing"
+
+    def pause(self):
+        pass
+
+    def unpause(self):
+        pass

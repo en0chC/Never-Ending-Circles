@@ -22,7 +22,7 @@ class Levels:
 
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.wav", 113.15,
+            "assets/music/level1.wav", 125,
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N12WtoE", "N01WtoN", "N01StoE", 
@@ -35,17 +35,14 @@ class Levels:
 
         # Stores all the level arrays
         self.levels = [self.level1]
-        # Current level corresponding to level's index in levels array
-        self.currentLevel = 0
     
-    def loadLevel(self, tiles):
+    def loadLevel(self, tiles, currentLevel):
         # Create tiles sprite group
-        tiles.empty()
         self.nextTileCenter = [0,0]
-        self.currentBPM = self.levels[self.currentLevel][1]
+        self.currentBPM = self.levels[currentLevel][1]
 
         # Go through each tile in level array
-        for tile in self.levels[self.currentLevel][2:]:
+        for tile in self.levels[currentLevel][2:]:
             for i in range(int(tile[1:3])):
                 # If normal tile
                 if tile[0] == "N":
@@ -73,5 +70,5 @@ class Levels:
                     self.nextTileCenter[0] += -100
 
         # Return tiles sprite group and BPM of the level
-        return tiles, self.levels[self.currentLevel][0], \
-        self.levels[self.currentLevel][1]
+        return tiles, self.levels[currentLevel][0], \
+        self.levels[currentLevel][1]

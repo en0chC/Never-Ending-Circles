@@ -9,9 +9,7 @@
 
 
 # To Do:
-- 	Add buffer time at the start of the game to ensure 
-everything is first displayed and then the countdown started 
-(Loading Screen)
+- Fix Camera Class
 
 
 
@@ -56,7 +54,7 @@ Tile Design
 -	11:30am - 1:30pm
 Writing code
 -	1:30pm - 11:00pm
--	12:00pm - 
+-	12:30pm - 
 
 
 
@@ -70,6 +68,15 @@ Writing code
 -	Added Speed Change and Reverse Direction tile modifiers
 -	Added fail state and sound effect
 -	Created all tile type images
+-	Reorganized code structure to allow for game states
+-	Added different game states
+	-	Title Screen, Main Menu
+
+
+
+# TP2 Updates
+-	gameState.py file
+
 
 
 # File Structure
