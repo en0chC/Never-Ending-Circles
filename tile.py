@@ -26,7 +26,7 @@ class Tile(pygame.sprite.Sprite):
         if modifier[0] == "S":
             self.modifier = "S"
             # BPM to switch to
-            self.modifierBPM = int(modifier[3:6])
+            self.modifierBPM = float(modifier[3:9])
             # If new BPM is higher than current BPM, use speed up image
             if self.modifierBPM > currentBPM:
                 self.modifierImage = pygame.image.load(

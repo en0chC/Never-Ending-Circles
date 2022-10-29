@@ -22,7 +22,7 @@ class Levels:
 
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.wav", 113,
+            "assets/music/level1.wav", 113.15,
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N12WtoE", "N01WtoN", "N01StoE", 
@@ -30,7 +30,7 @@ class Levels:
             "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N12WtoE", 
             "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
             "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", "N01WtoN", "N01StoE", 
-            "S01027WtoE", "N06WtoE"
+            "S01027.50WtoE", "N06WtoE"
         ]
 
         # Stores all the level arrays
@@ -54,8 +54,8 @@ class Levels:
                 # If change speed tile
                 if tile[0] == "S":
                     tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
-                    tile[6:], tile[0:6], self.currentBPM))
-                    self.currentBPM = int(tile[3:6])
+                    tile[9:], tile[0:9], self.currentBPM))
+                    self.currentBPM = float(tile[3:9])
                 # If reverse direction tile
                 if tile[0] == "R":
                     tiles.add(Tile(self.wndCenter, self.nextTileCenter, 

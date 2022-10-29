@@ -54,6 +54,7 @@ Tile Design
 -	11:30am - 1:30pm
 Writing code
 -	1:30pm - 11:00pm
+-	12:00pm - 
 
 
 
