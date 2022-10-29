@@ -76,6 +76,8 @@ Writing code
 
 # TP2 Updates
 -	gameState.py file
+-	Not using pydub library anymore, mixer in pygame is sufficient and
+	less cumbersome
 
 
 

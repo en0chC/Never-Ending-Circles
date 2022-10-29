@@ -97,9 +97,9 @@ class NeverEndingCircles:
 
     def drawText(self, display, font, text, color, x, y):
         if font == "Title":
-            textImage = self.titleFont.render(text, True, color)
+            textImage = self.titleFont.render(text, False, color)
         else:
-            textImage = self.mainFont.render(text, True, color)
+            textImage = self.mainFont.render(text, False, color)
         textRect = textImage.get_rect(center=(x, y))
         display.blit(textImage, textRect)
 

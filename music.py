@@ -14,25 +14,24 @@ import multiprocessing # Used to allow music be played while game is running
 #------------------------------------------------------------------------------
 from pydub import AudioSegment
 from pydub.playback import play
+from pygame import mixer
 
 class Music:
     def __init__(self, musicFile):
+        mixer.init()
         # Set up music
         self.musicFile = musicFile
-        self.piece = AudioSegment.from_wav(musicFile) - 10
-        # Start buffer for the countdown at the start of the level
-        startBuffer = AudioSegment.from_wav(musicFile)[0:2600] - 1000
-        self.piece = startBuffer + self.piece
-        self.music = multiprocessing.Process(target=play, args=(self.piece,))
+        mixer.music.load(musicFile)
+        mixer.music.set_volume(0.3)
 
     def stopMusic(self):
-        self.music.terminate()
+        mixer.music.stop()
 
     def startMusic(self):
-        self.music.start()
+        mixer.music.play()
 
     def pause(self):
-        pass
+        mixer.music.pause()
 
     def unpause(self):
-        pass
+        mixer.music.unpause()

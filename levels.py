@@ -22,7 +22,7 @@ class Levels:
 
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.wav", 125,
+            "assets/music/level1.wav", 124.3,
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N12WtoE", "N01WtoN", "N01StoE", 
@@ -30,7 +30,7 @@ class Levels:
             "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N12WtoE", 
             "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
             "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", "N01WtoN", "N01StoE", 
-            "S01027.50WtoE", "N06WtoE"
+            "S01030.00WtoE", "N06WtoE"
         ]
 
         # Stores all the level arrays

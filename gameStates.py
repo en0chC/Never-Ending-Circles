@@ -136,14 +136,15 @@ class Gameplay(GameState):
         self.countdownTimer = 3
 
         mixer.init()
-        mixer.music.load("assets/sound/fail.mp3")
+        self.failSound = mixer.Sound("assets/sound/fail.mp3")
+        self.musicFile = self.game.music.musicFile
+        self.game.music = Music(self.musicFile)
 
     def update(self, keysPressed):
         if keysPressed["enter"] and self.gameState == "NotStarted":
-            self.game.music.startMusic()
             self.countdownStartTick = pygame.time.get_ticks()
             self.gameState = "Countdown"
-        if keysPressed["escape"]:
+        if keysPressed["escape"] and self.gameState != "Countdown":
             self.game.music.pause()
             newState = PauseMenu(self.game)
             newState.nextState()
@@ -174,23 +175,27 @@ class Gameplay(GameState):
     def render(self, screen):
         screen.fill((0, 0, 0))
         self.game.tiles.draw(screen)
+        self.game.tiles.update(screen)
         self.game.player.draw(screen)
         if self.gameState == "Countdown":
             self.game.drawText(screen, "Main", str(self.countdownTimer),
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
         if self.gameState == "Failed":
-            self.game.drawText(screen, "Main", "Press enter to restart",
+            self.game.drawText(screen, "Main", "Press r to restart",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
         if self.gameState == "Won":
-            self.game.drawText(screen, "Main", 
-            "You Won!\nPress enter to return to the main menu",
+            self.game.drawText(screen, "Main", "You Won!",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
+            self.game.drawText(screen, "Main", 
+            "Press enter to return to the main menu",
+            (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.3)
 
     def countdown(self):
         self.countdownTimer = \
         3 - (pygame.time.get_ticks() - self.countdownStartTick)//1000
         if self.countdownTimer == 0:
             self.gameState = "Gameplay"
+            self.game.music.startMusic()
 
     def gameplay(self, keysPressed):
         # Get blue circle and orange circle sprites
@@ -212,8 +217,8 @@ class Gameplay(GameState):
         not pygame.sprite.collide_mask(blueCircle, nextTile) and \
         not pygame.sprite.collide_mask(orangeCircle, nextTile):
             # Play fail sound effect and set the game state to failed
-            mixer.music.play()
-            self.gameState = "failed"
+            self.failSound.play()
+            self.gameState = "Failed"
             self.game.music.stopMusic()
 
         # If circle and tile masks colliding, circle is moving and
@@ -257,12 +262,10 @@ class Gameplay(GameState):
 
         # Once final tile is reached, set game state to failed
         if self.nextTileIndex == len(self.game.tiles.sprites()):
-            self.gameState = "failed"
+            self.gameState = "Won"
 
     def failed(self, keysPressed):
         self.game.music.stopMusic()
-        if keysPressed["enter"]:
-            self.game.stateStack.pop()
 
     def won(self, keysPressed):
         if keysPressed["enter"]:
