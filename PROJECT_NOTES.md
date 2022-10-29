@@ -9,7 +9,9 @@
 
 
 # To Do:
-- Fix Camera Class
+- 	Add buffer time at the start of the game to ensure 
+everything is first displayed and then the countdown started 
+(Loading Screen)
 
 
 
