@@ -94,10 +94,6 @@ class LevelTransition(GameState):
         super().__init__(game)
         self.game = game
 
-        self.game.screen.fill((0, 0, 0))
-        self.game.drawText(self.game.screen, "Main", "Loading...", 
-        (255, 255, 255), self.game.wndCenter[0], self.game.wndCenter[1])
-
         self.levels = Levels(self.game.wndCenter)
         self.game.tiles.empty()
         self.game.tiles, self.game.music, self.game.BPM = \

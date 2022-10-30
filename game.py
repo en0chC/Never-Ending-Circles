@@ -42,7 +42,7 @@ class NeverEndingCircles:
         
         # Set up text fonts
         self.titleFont = pygame.font.Font("assets/fonts/GodoMaum.ttf", 140)
-        self.mainFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 70)
+        self.mainFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 50)
         self.scoreFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 15)
 
         # Track key presses of the player
