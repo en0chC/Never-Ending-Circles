@@ -102,13 +102,17 @@ class LevelTransition(GameState):
         self.game.tiles.empty()
         self.game.tiles, self.game.music, self.game.BPM = \
             self.levels.loadLevel(self.game.tiles, level)
-        self.game.music = Music(self.game.music)
+        self.game.music = Music(self.game.music, 
+            self.game.checkpointMusicTime[-1])
 
         self.game.player.empty()
         self.game.player.add(Player("Blue", self.game.wndSize, 
             self.game.FPS, self.game.BPM))
         self.game.player.add(Player("Orange", self.game.wndSize, 
             self.game.FPS, self.game.BPM))
+
+        self.game.camera = Camera(self.game.wndSize)
+        self.moveToCheckpoint()
 
     def update(self, keysPressed):
         if keysPressed["enter"]:
@@ -123,22 +127,38 @@ class LevelTransition(GameState):
         self.game.tiles.draw(screen)
         self.game.player.draw(screen)
 
+    def moveToCheckpoint(self):
+        checkpointCounter = 0
+        tiles = self.game.tiles.sprites()
+        
+        while checkpointCounter <= self.game.checkpoints[-1]:
+            self.game.camera.centerCam(tiles[checkpointCounter])
+            for tile in self.game.tiles.sprites():
+                tile.rect.x -= self.game.camera.offset.x
+                tile.rect.y -= self.game.camera.offset.y
+            checkpointCounter += 1
+
+
 class Gameplay(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.game.camera = Camera(self.game.wndSize)
         self.gameState = "NotStarted"
-        self.nextTileIndex = 1
+        self.nextTileIndex = self.game.checkpoints[-1] + 1
+        self.startingCheckpoint = self.game.checkpoints[-1]
         self.passedTile = False
         
         self.countdownStartTick = 0
         self.countdownTimer = 3
 
+        self.score = self.game.checkpointScore[-1]
+        self.scoreType = None
+        self.scoreModifier = 1
+
         mixer.init()
         self.failSound = mixer.Sound("assets/sound/fail.mp3")
         self.musicFile = self.game.music.musicFile
-        self.game.music = Music(self.musicFile)
+        self.game.music = Music(self.musicFile, self.game.checkpointMusicTime[-1])
 
     def update(self, keysPressed):
         if keysPressed["enter"] and self.gameState == "NotStarted":
@@ -180,15 +200,28 @@ class Gameplay(GameState):
         if self.gameState == "Countdown":
             self.game.drawText(screen, "Main", str(self.countdownTimer),
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
+        if self.gameState == "Gameplay":
+            self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
+            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
+            if self.scoreType != None and self.scoreType == "Perfect":
+                self.game.drawText(screen, "Score", self.scoreType,
+                (122, 178, 131), self.game.wndSize[0]*0.49, self.game.wndSize[1]*0.47)
+            if self.scoreType != None and self.scoreType == "Far":
+                self.game.drawText(screen, "Score", self.scoreType,
+                (211, 81, 84), self.game.wndSize[0]*0.49, self.game.wndSize[1]*0.47)
         if self.gameState == "Failed":
             self.game.drawText(screen, "Main", "Press r to restart",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
+            self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
+            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
         if self.gameState == "Won":
             self.game.drawText(screen, "Main", "You Won!",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
             self.game.drawText(screen, "Main", 
             "Press enter to return to the main menu",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.3)
+            self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
+            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
 
     def countdown(self):
         self.countdownTimer = \
@@ -203,6 +236,8 @@ class Gameplay(GameState):
         orangeCircle = self.game.player.sprites()[1]
         # Get next tile in path
         nextTile = self.game.tiles.sprites()[self.nextTileIndex]
+        currentTile = self.game.tiles.sprites()[self.nextTileIndex - 1]
+
 
         # If the moving circle has collided with the next tile
         if (pygame.sprite.collide_mask(blueCircle, nextTile) and 
@@ -227,26 +262,70 @@ class Gameplay(GameState):
         blueCircle.moveState == "Move" and keysPressed["hit"]:
             # Snap circle to tile, update the center of circular motion
             # of other circle and set the other circle to start moving
+            self.scoreType = blueCircle.getScore(nextTile)
+
+
+            if self.scoreType == "Perfect":
+                if self.scoreModifier < 1.5:
+                    self.scoreModifier += 0.05
+                self.score += 1000 * self.scoreModifier
+            if self.scoreType == "Far":
+                self.scoreModifier = 1
+                self.score += 1000
+
+                
+            # If next tile has a modifier, update changes to circles
+            if nextTile.modifier != "N":
+                blueCircle.modifierChanges(nextTile)
+                orangeCircle.modifierChanges(nextTile)
+            if nextTile.modifier == "C" and \
+            self.game.checkpoints[-1] != self.nextTileIndex - 1:
+                self.game.checkpoints.append(self.nextTileIndex)
+                self.game.checkpointScore.append(self.score)
+            if currentTile.modifier == "C" and \
+            len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
+                self.game.checkpointMusicTime.append(
+                self.startingCheckpoint + self.game.music.getPos())
+            print(self.game.checkpointMusicTime)
+
+
             blueCircle.snapToTile(nextTile)
             # Update camera offset
             self.game.camera.centerCam(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
+        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
+        orangeCircle.moveState == "Move" and keysPressed["hit"]:
+            self.scoreType = orangeCircle.getScore(nextTile)
+            if self.scoreType == "Perfect":
+                if self.scoreModifier < 1.5:
+                    self.scoreModifier += 0.05
+                self.score += 1000 * self.scoreModifier
+            if self.scoreType == "Far":
+                self.scoreModifier = 1
+                self.score += 1000
             # If next tile has a modifier, update changes to circles
             if nextTile.modifier != "N":
                 blueCircle.modifierChanges(nextTile)
                 orangeCircle.modifierChanges(nextTile)
-        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
-        orangeCircle.moveState == "Move" and keysPressed["hit"]:
+            if nextTile.modifier == "C" and \
+            self.game.checkpoints[-1] != self.nextTileIndex - 1:
+                self.game.checkpoints.append(self.nextTileIndex)
+                self.game.checkpointScore.append(self.score)
+            if currentTile.modifier == "C" and \
+            len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
+                self.game.checkpointMusicTime.append(
+                self.startingCheckpoint + self.game.music.getPos())
+            print(self.game.checkpointMusicTime)
+
+            
+
             orangeCircle.snapToTile(nextTile)
             self.game.camera.centerCam(orangeCircle)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
-            if nextTile.modifier != "N":
-                blueCircle.modifierChanges(nextTile)
-                orangeCircle.modifierChanges(nextTile)
 
         # Update camera offset and move sprites appropriately
         for sprite in self.game.player.sprites():

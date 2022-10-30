@@ -76,6 +76,20 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = nextTile.rect.center
         self.moveState = "Fixed"
 
+
+
+    def getScore(self, nextTile):
+        distanceToTile = \
+        ((nextTile.rect.center[1] - self.rect.center[1])**2 
+        + (nextTile.rect.center[0] - self.rect.center[0])**2)**(1/2)
+
+        if distanceToTile <= 17:
+            return "Perfect"
+        else:
+            return "Far"
+
+
+
     # For the fixed player, update center of circular motion and 
     # starting position of the circular motion relative to moving circle
     def updateCircularMotionCenter(self, otherCircle):

@@ -22,15 +22,15 @@ class Levels:
 
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.wav", 124.3,
+            "assets/music/level1.mp3", 124.3,
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
-            "N14WtoE", "N01WtoN", "N01StoE", "N12WtoE", "N01WtoN", "N01StoE", 
-            "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", "N01NtoE", "N01WtoS", 
-            "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N12WtoE", 
+            "N14WtoE", "N01WtoN", "N01StoE", "N05WtoE", "C01WtoE", "N06WtoE", 
             "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
-            "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", "N01WtoN", "N01StoE", 
-            "S01030.00WtoE", "N06WtoE"
+            "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", 
+            "N01NtoE", "N12WtoE", "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", 
+            "R08WtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", 
+            "N01WtoN", "N01StoE", "S01030.00WtoE", "N06WtoE"
         ]
 
         # Stores all the level arrays
@@ -57,7 +57,9 @@ class Levels:
                 if tile[0] == "R":
                     tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
                     tile[3:], tile[0], self.currentBPM))
-
+                if tile[0] == "C":
+                    tiles.add(Tile(self.wndCenter, self.nextTileCenter, 
+                    tile[3:], tile[0], self.currentBPM))
                 # Get ending direction from tile and set next tile center 
                 # to the next spot in corresponding direction
                 if tile.split("to")[1] == "N":

@@ -71,13 +71,18 @@ Writing code
 -	Reorganized code structure to allow for game states
 -	Added different game states
 	-	Title Screen, Main Menu
+-	Score System
+-	Checkpoint Tile
 
 
 
 # TP2 Updates
 -	gameState.py file
 -	Not using pydub library anymore, mixer in pygame is sufficient and
-	less cumbersome
+	less cumbersome since there is a delay when starting pydub music
+-	No save file system, user scores will be stored on a server
+-	It seems that pygame mixer has a starting positioning inaccuracy
+	so I may need to use another library
 
 
 

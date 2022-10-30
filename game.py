@@ -34,12 +34,16 @@ class NeverEndingCircles:
         self.camera = None
         self.music = None
         self.BPM = None
+        self.checkpoints = [0]
+        self.checkpointScore = [0]
+        self.checkpointMusicTime = [0.0]
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.Group()
         
         # Set up text fonts
         self.titleFont = pygame.font.Font("assets/fonts/GodoMaum.ttf", 140)
         self.mainFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 70)
+        self.scoreFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 15)
 
         # Track key presses of the player
         self.keysPressed = {
@@ -97,9 +101,11 @@ class NeverEndingCircles:
 
     def drawText(self, display, font, text, color, x, y):
         if font == "Title":
-            textImage = self.titleFont.render(text, False, color)
-        else:
-            textImage = self.mainFont.render(text, False, color)
+            textImage = self.titleFont.render(text, True, color)
+        if font == "Main":
+            textImage = self.mainFont.render(text, True, color)
+        if font == "Score":
+            textImage = self.scoreFont.render(text, True, color)
         textRect = textImage.get_rect(center=(x, y))
         display.blit(textImage, textRect)
 
