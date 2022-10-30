@@ -8,11 +8,6 @@
 
 
 
-# To Do:
-- Fix Camera Class
-
-
-
 # Features to Add:
 TP 1
 - 	Start countdown
@@ -55,6 +50,8 @@ Tile Design
 Writing code
 -	1:30pm - 11:00pm
 -	12:30pm - 1:00am
+Updating Design Docs
+- 	12:30pm - 1:00pm
 
 
 
@@ -83,15 +80,3 @@ Writing code
 -	No save file system, user scores will be stored on a server
 -	It seems that pygame mixer has a starting positioning inaccuracy
 	so I may need to use another library
-
-
-
-# File Structure
-__main__.py | file loaded to run the game
-
--	assets
-	-	sprites
-
-game.py | main game loop
-
-utils.py | helper functions
