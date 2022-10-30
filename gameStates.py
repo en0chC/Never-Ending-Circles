@@ -155,7 +155,6 @@ class Gameplay(GameState):
         self.scoreType = None
         self.scoreModifier = 1
 
-        mixer.init()
         self.failSound = mixer.Sound("assets/sound/fail.mp3")
         self.musicFile = self.game.music.musicFile
         self.game.music = Music(self.musicFile, self.game.checkpointMusicTime[-1])

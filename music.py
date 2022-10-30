@@ -10,28 +10,33 @@ This module contains the Music class that is in charge of playing the music
 in the levels.
 """
 #------------------------------------------------------------------------------
-from pygame import mixer
+import vlc
 
 class Music:
     def __init__(self, musicFile, timePos):
-        mixer.init()
         # Set up music
         self.musicFile = musicFile
         self.timePos = timePos
-        mixer.music.load(musicFile)
-        mixer.music.set_volume(0.3)
+        self.instance = vlc.Instance()
+        self.player = self.instance.media_player_new()
+        self.music = self.instance.media_new(musicFile)
+        self.player.set_media(self.music)
+        self.player.audio_set_volume(70)
 
     def stopMusic(self):
-        mixer.music.stop()
+        self.player.stop()
 
     def startMusic(self):
-        mixer.music.play(0, self.timePos)
+        self.player.play()
+        self.player.set_time(int(self.timePos))
 
     def pause(self):
-        mixer.music.pause()
+        if self.player.is_playing():
+            self.player.pause()
 
     def unpause(self):
-        mixer.music.unpause()
+        if not self.player.is_playing():
+            self.player.pause()
 
     def getPos(self):
-        return mixer.music.get_pos() / 1000
+        return self.player.get_time() + 50
