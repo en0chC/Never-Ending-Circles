@@ -7,8 +7,11 @@ https://stock.adobe.com/images/vintage-classic-blue-texture-of-paper-background-
 # Hit sound effect from 'Osu!'
 https://osu.ppy.sh/home
 
-# Level 1 Music
+# Music
+Level 1 Music:
 A Dance of Fire and Ice OST - https://www.youtube.com/watch?v=roKDAZ82i_0
+Level 2 Music
+A Dance of Fire and Ice OST - https://www.youtube.com/watch?v=aVLrALO2bmY
 
 # Fail Sound Effect
 A Dance of Fire and Ice - https://store.steampowered.com/app/977950/A_Dance_of_Fire_and_Ice/

@@ -60,7 +60,7 @@ class MainMenu(GameState):
         self.updateSelected(keysPressed)
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Start":
-                newState = LevelTransition(self.game, 0)
+                newState = LevelSelect(self.game)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Exit":
                 pygame.quit()
@@ -89,15 +89,65 @@ class MainMenu(GameState):
         if self.menuIndex == 1:
             self.exitColor = (211, 81, 84)
 
+class LevelSelect(GameState):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
+        self.menuOptions = ["Level1", "Level2", "Back"]
+        self.menuIndex = 0
+        self.level1Color = (211, 81, 84)
+        self.level2Color = (255, 255, 255)
+        self.backColor = (255, 255, 255)
+    
+    def update(self, keysPressed):
+        self.updateSelected(keysPressed)
+        if keysPressed["enter"]:
+            if self.menuOptions[self.menuIndex] == "Level1":
+                newState = LevelTransition(self.game, 0)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level2":
+                newState = LevelTransition(self.game, 1)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Back":
+                self.game.stateStack.pop()
+        self.game.resetKeysPressed()
+
+    def render(self, screen):
+        screen.fill((0, 0, 0))
+        self.game.drawText(screen, "Title", "Level Select", 
+        (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
+        self.game.drawText(screen, "Main", "Level 1",
+        self.level1Color, self.game.wndCenter[0], self.game.wndSize[1]*0.4)
+        self.game.drawText(screen, "Main", "Level 2",
+        self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
+        self.game.drawText(screen, "Main", "Back",
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+
+    def updateSelected(self, keysPressed):
+        if keysPressed["up"]:
+            self.menuIndex = (self.menuIndex - 1) % len(self.menuOptions)
+        elif keysPressed["down"]:
+            self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
+        
+        self.level1Color = (255, 255, 255)
+        self.level2Color = (255, 255, 255)
+        self.backColor = (255, 255, 255)
+        if self.menuIndex == 0:
+            self.level1Color = (211, 81, 84)
+        if self.menuIndex == 1:
+            self.level2Color = (211, 81, 84)
+        if self.menuIndex == 2:
+            self.backColor = (211, 81, 84)
+
 class LevelTransition(GameState):
     def __init__(self, game, level):
         super().__init__(game)
         self.game = game
 
-        self.levels = Levels(self.game.wndCenter)
+        self.game.levels = Levels(self.game.wndCenter, level)
         self.game.tiles.empty()
         self.game.tiles, self.game.music, self.game.BPM = \
-            self.levels.loadLevel(self.game.tiles, level)
+            self.game.levels.loadLevel(self.game.tiles)
         self.game.music = Music(self.game.music, 
             self.game.checkpointMusicTime[-1])
 
@@ -143,7 +193,7 @@ class Gameplay(GameState):
         self.nextTileIndex = self.game.checkpoints[-1] + 1
         self.startingCheckpoint = self.game.checkpoints[-1]
         self.passedTile = False
-        
+
         self.countdownStartTick = 0
         self.countdownTimer = 3
 
@@ -173,7 +223,7 @@ class Gameplay(GameState):
             self.game.music.stopMusic()
             self.game.stateStack.pop()
             self.game.stateStack.pop()
-            newState = LevelTransition(self.game, 0)
+            newState = LevelTransition(self.game, self.game.levels.currentLevel)
             newState.nextState()
 
         if self.gameState == "Countdown":
@@ -181,7 +231,7 @@ class Gameplay(GameState):
         if self.gameState == "Gameplay":
             self.gameplay(keysPressed)
         if self.gameState == "Failed":
-            self.failed(keysPressed)
+            self.failed()
         if self.gameState == "Won":
             self.won(keysPressed)
 
@@ -251,10 +301,72 @@ class Gameplay(GameState):
             self.gameState = "Failed"
             self.game.music.stopMusic()
 
+
+        if pygame.sprite.collide_mask(blueCircle, nextTile) and\
+        self.game.invincible and \
+        abs(blueCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
+        abs(blueCircle.rect.center[1] - nextTile.rect.center[1]) <= 10:
+            # Snap circle to tile, update the center of circular motion
+            # of other circle and set the other circle to start moving
+            self.scoreType = "Perfect"
+            if self.scoreModifier < 1.5:
+                self.scoreModifier += 0.05
+            self.score += 1000 * self.scoreModifier
+                
+            # If next tile has a modifier, update changes to circles
+            if nextTile.modifier != "N":
+                blueCircle.modifierChanges(nextTile)
+                orangeCircle.modifierChanges(nextTile)
+            if nextTile.modifier == "C" and \
+            self.game.checkpoints[-1] != self.nextTileIndex - 1:
+                self.game.checkpoints.append(self.nextTileIndex)
+                self.game.checkpointScore.append(self.score)
+            if currentTile.modifier == "C" and \
+            len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
+                self.game.checkpointMusicTime.append(
+                self.startingCheckpoint + self.game.music.getPos() + 800)
+                print(self.game.checkpointMusicTime)
+
+            blueCircle.snapToTile(nextTile)
+            # Update camera offset
+            self.game.camera.centerCam(blueCircle)
+            orangeCircle.moveState = "Move"
+            self.nextTileIndex += 1
+            self.passedTile = False
+
+        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and\
+        self.game.invincible and \
+        abs(orangeCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
+        abs(orangeCircle.rect.center[1] - nextTile.rect.center[1]) <= 10:
+            self.scoreType = "Perfect"
+            if self.scoreModifier < 1.5:
+                self.scoreModifier += 0.05
+            self.score += 1000 * self.scoreModifier
+
+            # If next tile has a modifier, update changes to circles
+            if nextTile.modifier != "N":
+                blueCircle.modifierChanges(nextTile)
+                orangeCircle.modifierChanges(nextTile)
+            if nextTile.modifier == "C" and \
+            self.game.checkpoints[-1] != self.nextTileIndex - 1:
+                self.game.checkpoints.append(self.nextTileIndex)
+                self.game.checkpointScore.append(self.score)
+            if currentTile.modifier == "C" and \
+            len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
+                self.game.checkpointMusicTime.append(
+                self.startingCheckpoint + self.game.music.getPos() + 800)
+                print(self.game.checkpointMusicTime)
+
+            orangeCircle.snapToTile(nextTile)
+            self.game.camera.centerCam(orangeCircle)
+            blueCircle.moveState = "Move"
+            self.nextTileIndex += 1
+            self.passedTile = False
+
         # If circle and tile masks colliding, circle is moving and
         # one of the hit keys were pressed
-        if pygame.sprite.collide_mask(blueCircle, nextTile) and \
-        blueCircle.moveState == "Move" and keysPressed["hit"]:
+        elif (pygame.sprite.collide_mask(blueCircle, nextTile) and \
+        blueCircle.moveState == "Move" and keysPressed["hit"]):
             # Snap circle to tile, update the center of circular motion
             # of other circle and set the other circle to start moving
             self.scoreType = blueCircle.getScore(nextTile)
@@ -280,8 +392,9 @@ class Gameplay(GameState):
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos())
-            print(self.game.checkpointMusicTime)
+                self.startingCheckpoint + self.game.music.getPos() + 800)
+                print(self.game.checkpointMusicTime)
+
 
 
             blueCircle.snapToTile(nextTile)
@@ -290,8 +403,8 @@ class Gameplay(GameState):
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
-        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
-        orangeCircle.moveState == "Move" and keysPressed["hit"]:
+        elif (pygame.sprite.collide_mask(orangeCircle, nextTile) and
+        orangeCircle.moveState == "Move" and keysPressed["hit"]):
             self.scoreType = orangeCircle.getScore(nextTile)
             if self.scoreType == "Perfect":
                 if self.scoreModifier < 1.5:
@@ -311,10 +424,10 @@ class Gameplay(GameState):
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos())
-            print(self.game.checkpointMusicTime)
+                self.startingCheckpoint + self.game.music.getPos() + 800)
+                print(self.game.checkpointMusicTime)
 
-            
+
 
             orangeCircle.snapToTile(nextTile)
             self.game.camera.centerCam(orangeCircle)
@@ -338,7 +451,7 @@ class Gameplay(GameState):
         if self.nextTileIndex == len(self.game.tiles.sprites()):
             self.gameState = "Won"
 
-    def failed(self, keysPressed):
+    def failed(self):
         self.game.music.stopMusic()
 
     def won(self, keysPressed):
@@ -350,9 +463,10 @@ class PauseMenu(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Resume", "ExitToMainMenu"]
+        self.menuOptions = ["Resume", "Invincible", "ExitToMainMenu"]
         self.menuIndex = 0
         self.resumeColor = (211, 81, 84)
+        self.invincibleColor = (255, 255, 255)
         self.exitColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -361,16 +475,30 @@ class PauseMenu(GameState):
             if self.menuOptions[self.menuIndex] == "Resume":
                 self.game.music.unpause()
                 self.game.stateStack.pop()
+            if self.menuOptions[self.menuIndex] == "Invincible":
+                if self.game.invincible:
+                    self.game.invincible = False
+                else:
+                    self.game.invincible = True
+                print(self.game.invincible)
             if self.menuOptions[self.menuIndex] == "ExitToMainMenu":
+                self.game.resetLevelState()
                 while len(self.game.stateStack) != 2:
                     self.game.stateStack.pop()
         self.game.resetKeysPressed()
 
     def render(self, screen):
+        self.game.stateStack[-2].render(screen)
         self.game.drawText(screen, "Main", "Resume",
         self.resumeColor, self.game.wndCenter[0], self.game.wndSize[1]*0.4)
+        if self.game.invincible:
+            self.game.drawText(screen, "Main", "Invincible Mode: ON",
+            self.invincibleColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        else:
+            self.game.drawText(screen, "Main", "Invincible Mode: OFF",
+            self.invincibleColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Exit to Main Menu",
-        self.exitColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.exitColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -379,8 +507,11 @@ class PauseMenu(GameState):
             self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
         
         self.resumeColor = (255, 255, 255)
+        self.invincibleColor = (255, 255, 255)
         self.exitColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.resumeColor = (211, 81, 84)
         if self.menuIndex == 1:
+            self.invincibleColor = (211, 81, 84)
+        if self.menuIndex == 2:
             self.exitColor = (211, 81, 84)
