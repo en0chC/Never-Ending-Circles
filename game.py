@@ -31,7 +31,6 @@ class NeverEndingCircles:
         self.clock = pygame.time.Clock()
         self.FPS = 60
         self.countdownCounter = 3
-        self.countdownStart = False
 
         self.camera = None
         self.music = None
@@ -104,7 +103,7 @@ class NeverEndingCircles:
                 if event.key == pygame.K_RETURN:
                     self.keysPressed["enter"] = False
 
-            if event.type == pygame.USEREVENT and self.countdownStart:
+            if event.type == pygame.USEREVENT:
                 self.countdownCounter -= 1
 
     def drawText(self, display, font, text, color, x, y):
@@ -130,12 +129,15 @@ class NeverEndingCircles:
         self.music = None
         self.BPM = None
         self.levels = None
+        self.countdownCounter = 3
+        pygame.time.set_timer(pygame.USEREVENT, 0)
+        self.tiles = pygame.sprite.Group()
+        self.player = pygame.sprite.Group()
+
+    def resetCheckpointState(self):
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
-        self.tiles = pygame.sprite.Group()
-        self.player = pygame.sprite.Group()
-        self.invincible = False
 
 if __name__ == "__main__":
     NeverEndingCircles().mainLoop()

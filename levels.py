@@ -35,7 +35,7 @@ class Levels:
         ]
 
         self.level2 = [
-            "assets/music/level2.mp3", 140,
+            "assets/music/level2.mp3", 149,
             "N13WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N09WtoE", "N01WtoS", "N01NtoW", "N01EtoS", "N01NtoE", "N01WtoS", 
             "N01NtoW", "N01EtoS", "N01NtoE", "N01WtoS", "N01NtoW", "N01EtoS", 

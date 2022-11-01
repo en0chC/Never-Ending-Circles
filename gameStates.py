@@ -103,9 +103,11 @@ class LevelSelect(GameState):
         self.updateSelected(keysPressed)
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Level1":
+                self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 0)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Level2":
+                self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 1)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
@@ -144,6 +146,7 @@ class LevelTransition(GameState):
         super().__init__(game)
         self.game = game
 
+        self.game.resetLevelState()
         self.game.levels = Levels(self.game.wndCenter, level)
         self.game.tiles.empty()
         self.game.tiles, self.game.music, self.game.BPM = \
@@ -194,9 +197,6 @@ class Gameplay(GameState):
         self.startingCheckpoint = self.game.checkpoints[-1]
         self.passedTile = False
 
-        self.countdownStartTick = 0
-        self.countdownTimer = 3
-
         self.score = self.game.checkpointScore[-1]
         self.scoreType = None
         self.scoreModifier = 1
@@ -207,7 +207,7 @@ class Gameplay(GameState):
 
     def update(self, keysPressed):
         if keysPressed["enter"] and self.gameState == "NotStarted":
-            self.countdownStartTick = pygame.time.get_ticks()
+            pygame.time.set_timer(pygame.USEREVENT, int((self.game.BPM) * 10))
             self.gameState = "Countdown"
         if keysPressed["escape"] and self.gameState != "Countdown":
             self.game.music.pause()
@@ -243,7 +243,7 @@ class Gameplay(GameState):
         self.game.tiles.update(screen)
         self.game.player.draw(screen)
         if self.gameState == "Countdown":
-            self.game.drawText(screen, "Main", str(self.countdownTimer),
+            self.game.drawText(screen, "Main", str(self.game.countdownCounter),
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
         if self.gameState == "Gameplay":
             self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
@@ -269,9 +269,7 @@ class Gameplay(GameState):
             (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
 
     def countdown(self):
-        self.countdownTimer = \
-        3 - (pygame.time.get_ticks() - self.countdownStartTick)//1000
-        if self.countdownTimer == 0:
+        if self.game.countdownCounter == 0:
             self.gameState = "Gameplay"
             self.game.music.startMusic()
 

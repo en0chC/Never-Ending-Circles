@@ -83,7 +83,7 @@ class Player(pygame.sprite.Sprite):
         ((nextTile.rect.center[1] - self.rect.center[1])**2 
         + (nextTile.rect.center[0] - self.rect.center[0])**2)**(1/2)
 
-        if distanceToTile <= 17:
+        if distanceToTile <= 24:
             return "Perfect"
         else:
             return "Far"

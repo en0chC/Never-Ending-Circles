@@ -50,7 +50,7 @@ Tile Design
 Writing code
 -	1:30pm - 11:00pm
 -	12:30pm - 1:00am
--	1:00am - 
+-	1:00am - 3:00am
 Updating Design Docs
 - 	12:30pm - 1:00pm
 
