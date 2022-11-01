@@ -3,10 +3,14 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 29th 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
-
+This module contains the different game state classes that the game can be in. 
+State classes are popped and pushed onto a stack located in the main game class, 
+allowing a hierarchical structure of game states and transitioning into and back
+to different game states. These game states all have two functions in common,
+'update' and 'render' which allows the main game class to call these methods on
+whichever state class is at the top of the stack. 
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
@@ -19,45 +23,54 @@ from music import Music
 from player import Player
 from camera import Camera
 
+# Parent class that game state child classes inherit from
 class GameState:
     def __init__(self, game):
         self.game = game
-        self.prevState = -1
 
+    # Push game state onto the state stack
     def nextState(self):
-        self.prevState += 1
         self.game.stateStack.append(self)
-
+    
+    # Pop game state from the state stack
     def exitState(self):
-        self.prevState -= 1
         self.game.stateStack.pop()
 
+# Title screen game state that is accessed first when opening the game
 class Title(GameState):
     def __init__(self, game):
         super().__init__(game)
 
+    # Checks for any key presses and updates the game appropriately
     def update(self, keysPressed):
         if keysPressed["enter"]:
+            # Create new game state class and push it onto the stack
             newState = MainMenu(self.game)
             newState.nextState()
+        # Reset status of key presses
         self.game.resetKeysPressed()
     
+    # Draws any text and sprite specific to the game state onto the screen
     def render(self, screen):
         screen.fill((0, 0, 0))
         self.game.drawText(screen, "Title", "Never Ending Circles", 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndCenter[1])
 
+# Main menu with options to start and go to level select or exit the game
 class MainMenu(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
+        # Keeps track of the menu option being currently selected
         self.menuOptions = ["Start", "Exit"]
         self.menuIndex = 0
+        # Color of the text to show user which one is currently highlighted
         self.startColor = (211, 81, 84)
         self.exitColor = (255, 255, 255)
     
     def update(self, keysPressed):
         self.updateSelected(keysPressed)
+        # When enter is pressed, select option that is currently highlighted
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Start":
                 newState = LevelSelect(self.game)
@@ -76,12 +89,15 @@ class MainMenu(GameState):
         self.game.drawText(screen, "Main", "Exit",
         self.exitColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
 
+    # Updates the menu option being selected
     def updateSelected(self, keysPressed):
+        # Allow user to scroll through menu options using arrow keys and
+        # menu to be circular (Go backs to first option when going past last)
         if keysPressed["up"]:
             self.menuIndex = (self.menuIndex - 1) % len(self.menuOptions)
         elif keysPressed["down"]:
             self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
-        
+        # Revert to white and change text color to orange if currently selected
         self.startColor = (255, 255, 255)
         self.exitColor = (255, 255, 255)
         if self.menuIndex == 0:
@@ -89,6 +105,7 @@ class MainMenu(GameState):
         if self.menuIndex == 1:
             self.exitColor = (211, 81, 84)
 
+# Level select menu, works exactly like the main menu
 class LevelSelect(GameState):
     def __init__(self, game):
         super().__init__(game)
@@ -103,6 +120,8 @@ class LevelSelect(GameState):
         self.updateSelected(keysPressed)
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Level1":
+                # Reset checkpoint related variables when opening a level
+                # Prevents carryover of checkpoints after playing other levels
                 self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 0)
                 newState.nextState()
@@ -130,7 +149,7 @@ class LevelSelect(GameState):
             self.menuIndex = (self.menuIndex - 1) % len(self.menuOptions)
         elif keysPressed["down"]:
             self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
-        
+
         self.level1Color = (255, 255, 255)
         self.level2Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
@@ -141,19 +160,24 @@ class LevelSelect(GameState):
         if self.menuIndex == 2:
             self.backColor = (211, 81, 84)
 
+# A loading buffer that creates all the tiles and players, and initializes
+# starting state of a level
 class LevelTransition(GameState):
     def __init__(self, game, level):
         super().__init__(game)
         self.game = game
-
+        # Reset any previously changed level related variables
         self.game.resetLevelState()
         self.game.levels = Levels(self.game.wndCenter, level)
+        # Empty tile sprite group to unload any previously played level
         self.game.tiles.empty()
+        # Load the level and initialize level related variables
         self.game.tiles, self.game.music, self.game.BPM = \
             self.game.levels.loadLevel(self.game.tiles)
         self.game.music = Music(self.game.music, 
             self.game.checkpointMusicTime[-1])
 
+        # Empty previously loaded players and add again to reset their variables
         self.game.player.empty()
         self.game.player.add(Player("Blue", self.game.wndSize, 
             self.game.FPS, self.game.BPM))
@@ -176,50 +200,65 @@ class LevelTransition(GameState):
         self.game.tiles.draw(screen)
         self.game.player.draw(screen)
 
+    # Checks last checkpoint passed and moves starting position to checkpoint
     def moveToCheckpoint(self):
-        checkpointCounter = 0
-        tiles = self.game.tiles.sprites()
-        
-        while checkpointCounter <= self.game.checkpoints[-1]:
-            self.game.camera.centerCam(tiles[checkpointCounter])
+        # Tracks current tile
+        tileCounter = 0
+        tilesList = self.game.tiles.sprites()
+        # While checkpoint hasn't been reached
+        while tileCounter <= self.game.checkpoints[-1]:
+            # Center the camera onto the current tile by calculating offset
+            self.game.camera.centerCam(tilesList[tileCounter])
+            # Offset the coordinates of each tile accordingly
             for tile in self.game.tiles.sprites():
                 tile.rect.x -= self.game.camera.offset.x
                 tile.rect.y -= self.game.camera.offset.y
-            checkpointCounter += 1
+            tileCounter += 1
 
-
+# Game state in which the game is being played
 class Gameplay(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
+        # Set initial game state to NotStarted
         self.gameState = "NotStarted"
+        # Set starting tile and next tile according to latest checkpoint
         self.nextTileIndex = self.game.checkpoints[-1] + 1
         self.startingCheckpoint = self.game.checkpoints[-1]
+        # Used to check if the circle is currently overlapping the tile
         self.passedTile = False
 
+        # Initialize score variables
         self.score = self.game.checkpointScore[-1]
         self.scoreType = None
         self.scoreModifier = 1
 
+        # Initialize music and sound effects
         self.failSound = mixer.Sound("assets/sound/fail.mp3")
         self.musicFile = self.game.music.musicFile
-        self.game.music = Music(self.musicFile, self.game.checkpointMusicTime[-1])
+        self.game.music = Music(self.musicFile, 
+            self.game.checkpointMusicTime[-1])
 
     def update(self, keysPressed):
         if keysPressed["enter"] and self.gameState == "NotStarted":
+            # Set the timer according to the BPM of the music
+            # This makes sure countdown reaches 0 right before the circle
+            # overlaps the next tile
             pygame.time.set_timer(pygame.USEREVENT, int((self.game.BPM) * 10))
             self.gameState = "Countdown"
         if keysPressed["escape"] and self.gameState != "Countdown":
+            # Enter the pause menu
             self.game.music.pause()
             newState = PauseMenu(self.game)
             newState.nextState()
-
+        # If the game has started, update positions and movement of sprites
         if self.gameState != "NotStarted":
             self.game.tiles.update(self.game.screen)
             self.game.player.sprites()[0].update(self.game.player.sprites()[1])
             self.game.player.sprites()[1].update(self.game.player.sprites()[0])
-
         if keysPressed["r"]:
+            # When restarting, stop the music, move back to level select state
+            # and reload the level by moving to level transition state
             self.game.music.stopMusic()
             self.game.stateStack.pop()
             self.game.stateStack.pop()
@@ -234,11 +273,12 @@ class Gameplay(GameState):
             self.failed()
         if self.gameState == "Won":
             self.won(keysPressed)
-
+        # Prevents player from just holding down hit keys and winning
         self.game.resetKeysPressed()
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        # Draw the tiles, players and text onto the screen
         self.game.tiles.draw(screen)
         self.game.tiles.update(screen)
         self.game.player.draw(screen)
@@ -247,18 +287,22 @@ class Gameplay(GameState):
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
         if self.gameState == "Gameplay":
             self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
-            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
+            (255, 255, 255), self.game.wndCenter[0]*0.28, 
+            self.game.wndSize[1]*0.08)
             if self.scoreType != None and self.scoreType == "Perfect":
                 self.game.drawText(screen, "Score", self.scoreType,
-                (122, 178, 131), self.game.wndSize[0]*0.49, self.game.wndSize[1]*0.47)
+                (122, 178, 131), self.game.wndSize[0]*0.49, 
+                self.game.wndSize[1]*0.47)
             if self.scoreType != None and self.scoreType == "Far":
                 self.game.drawText(screen, "Score", self.scoreType,
-                (211, 81, 84), self.game.wndSize[0]*0.49, self.game.wndSize[1]*0.47)
+                (211, 81, 84), self.game.wndSize[0]*0.49, 
+                self.game.wndSize[1]*0.47)
         if self.gameState == "Failed":
             self.game.drawText(screen, "Main", "Press r to restart",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
             self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
-            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
+            (255, 255, 255), self.game.wndCenter[0]*0.28, 
+            self.game.wndSize[1]*0.08)
         if self.gameState == "Won":
             self.game.drawText(screen, "Main", "You Won!",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
@@ -266,31 +310,34 @@ class Gameplay(GameState):
             "Press enter to return to the main menu",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.3)
             self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
-            (255, 255, 255), self.game.wndCenter[0]*0.28, self.game.wndSize[1]*0.08)
+            (255, 255, 255), self.game.wndCenter[0]*0.28, 
+            self.game.wndSize[1]*0.08)
 
+    # Switches game state to gameplay when countdown has reached zero
     def countdown(self):
         if self.game.countdownCounter == 0:
             self.gameState = "Gameplay"
             self.game.music.startMusic()
 
+    # Controls main mechanics of the game
     def gameplay(self, keysPressed):
         # Get blue circle and orange circle sprites
         blueCircle = self.game.player.sprites()[0]
         orangeCircle = self.game.player.sprites()[1]
-        # Get next tile in path
+        # Get next tile and current tile in path
         nextTile = self.game.tiles.sprites()[self.nextTileIndex]
         currentTile = self.game.tiles.sprites()[self.nextTileIndex - 1]
 
-
+        # Check if the circle is overlapping the tile and game fail condition
         # If the moving circle has collided with the next tile
         if (pygame.sprite.collide_mask(blueCircle, nextTile) and 
         blueCircle.moveState == "Move") or \
         (pygame.sprite.collide_mask(orangeCircle, nextTile) and
         orangeCircle.moveState == "Move"):
-            # circle is currently over the tile
+            # Circle is currently overlapping with the tile
             self.passedTile = True
         # If circle has passed over the tile and no longer colliding with tile
-        # that means player has failed to hit the input key on time
+        # that means player has failed to press the hit key on time
         elif self.passedTile == True and \
         not pygame.sprite.collide_mask(blueCircle, nextTile) and \
         not pygame.sprite.collide_mask(orangeCircle, nextTile):
@@ -299,39 +346,47 @@ class Gameplay(GameState):
             self.gameState = "Failed"
             self.game.music.stopMusic()
 
-
+        # If the blue circle is overlaping the tile, "Invincible" mode is on and
+        # its coordinates is close to the center of the next tile's center
         if pygame.sprite.collide_mask(blueCircle, nextTile) and\
         self.game.invincible and \
         abs(blueCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
         abs(blueCircle.rect.center[1] - nextTile.rect.center[1]) <= 10:
-            # Snap circle to tile, update the center of circular motion
-            # of other circle and set the other circle to start moving
+            # Set score to perfect
             self.scoreType = "Perfect"
+            # Score modifier system
             if self.scoreModifier < 1.5:
                 self.scoreModifier += 0.05
             self.score += 1000 * self.scoreModifier
-                
-            # If next tile has a modifier, update changes to circles
+            # If next tile has a modifier, update modifier changes to circles
             if nextTile.modifier != "N":
                 blueCircle.modifierChanges(nextTile)
                 orangeCircle.modifierChanges(nextTile)
+            # If next tile is a checkpoint tile and checkpoint has not already
+            # been passed
             if nextTile.modifier == "C" and \
             self.game.checkpoints[-1] != self.nextTileIndex - 1:
+                # Add checkpoint and current score at passing checkpoint
                 self.game.checkpoints.append(self.nextTileIndex)
                 self.game.checkpointScore.append(self.score)
+            # If current tile is checkpoint tile and music time at checkpoint
+            # has not already been added
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
+                # Add current music time so music can be played at
+                # appropriate point when starting from the checkpoint
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
-                print(self.game.checkpointMusicTime)
-
+            # Snap circle to tile, update the center of circular motion
+            # of other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
             # Update camera offset
             self.game.camera.centerCam(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
+            # Player has successfully pressed hit button on time
             self.passedTile = False
-
+        # Same as previous, just for orange circle
         elif pygame.sprite.collide_mask(orangeCircle, nextTile) and\
         self.game.invincible and \
         abs(orangeCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
@@ -340,7 +395,6 @@ class Gameplay(GameState):
             if self.scoreModifier < 1.5:
                 self.scoreModifier += 0.05
             self.score += 1000 * self.scoreModifier
-
             # If next tile has a modifier, update changes to circles
             if nextTile.modifier != "N":
                 blueCircle.modifierChanges(nextTile)
@@ -353,8 +407,6 @@ class Gameplay(GameState):
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
-                print(self.game.checkpointMusicTime)
-
             orangeCircle.snapToTile(nextTile)
             self.game.camera.centerCam(orangeCircle)
             blueCircle.moveState = "Move"
@@ -365,11 +417,8 @@ class Gameplay(GameState):
         # one of the hit keys were pressed
         elif (pygame.sprite.collide_mask(blueCircle, nextTile) and \
         blueCircle.moveState == "Move" and keysPressed["hit"]):
-            # Snap circle to tile, update the center of circular motion
-            # of other circle and set the other circle to start moving
+            # Determine user's score
             self.scoreType = blueCircle.getScore(nextTile)
-
-
             if self.scoreType == "Perfect":
                 if self.scoreModifier < 1.5:
                     self.scoreModifier += 0.05
@@ -377,8 +426,6 @@ class Gameplay(GameState):
             if self.scoreType == "Far":
                 self.scoreModifier = 1
                 self.score += 1000
-
-                
             # If next tile has a modifier, update changes to circles
             if nextTile.modifier != "N":
                 blueCircle.modifierChanges(nextTile)
@@ -391,18 +438,14 @@ class Gameplay(GameState):
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
-                print(self.game.checkpointMusicTime)
-
-
-
             blueCircle.snapToTile(nextTile)
-            # Update camera offset
             self.game.camera.centerCam(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
         elif (pygame.sprite.collide_mask(orangeCircle, nextTile) and
         orangeCircle.moveState == "Move" and keysPressed["hit"]):
+            # Determine score
             self.scoreType = orangeCircle.getScore(nextTile)
             if self.scoreType == "Perfect":
                 if self.scoreModifier < 1.5:
@@ -423,10 +466,6 @@ class Gameplay(GameState):
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
-                print(self.game.checkpointMusicTime)
-
-
-
             orangeCircle.snapToTile(nextTile)
             self.game.camera.centerCam(orangeCircle)
             blueCircle.moveState = "Move"
@@ -444,7 +483,6 @@ class Gameplay(GameState):
                 for tile in self.game.tiles.sprites():
                     tile.rect.x -= self.game.camera.offset.x
                     tile.rect.y -= self.game.camera.offset.y
-
         # Once final tile is reached, set game state to failed
         if self.nextTileIndex == len(self.game.tiles.sprites()):
             self.gameState = "Won"
@@ -454,6 +492,7 @@ class Gameplay(GameState):
 
     def won(self, keysPressed):
         if keysPressed["enter"]:
+            # Return to main menu
             while len(self.game.stateStack) != 2:
                 self.game.stateStack.pop()
 
@@ -471,21 +510,24 @@ class PauseMenu(GameState):
         self.updateSelected(keysPressed)
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Resume":
+                # Resume game
                 self.game.music.unpause()
                 self.game.stateStack.pop()
             if self.menuOptions[self.menuIndex] == "Invincible":
+                # Toggle invincible mode
                 if self.game.invincible:
                     self.game.invincible = False
                 else:
                     self.game.invincible = True
-                print(self.game.invincible)
             if self.menuOptions[self.menuIndex] == "ExitToMainMenu":
+                # Return to main menu state
                 self.game.resetLevelState()
                 while len(self.game.stateStack) != 2:
                     self.game.stateStack.pop()
         self.game.resetKeysPressed()
 
     def render(self, screen):
+        # Render the gameplay screen
         self.game.stateStack[-2].render(screen)
         self.game.drawText(screen, "Main", "Resume",
         self.resumeColor, self.game.wndCenter[0], self.game.wndSize[1]*0.4)

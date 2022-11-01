@@ -3,7 +3,6 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 15th 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
 This module contains the main logic of the game and is what will be imported 
@@ -27,11 +26,13 @@ class NeverEndingCircles:
         self.wndCenter = (self.wndSize[0]//2, self.wndSize[1]//2)
         self.screen = pygame.display.set_mode(self.wndSize, pygame.FULLSCREEN)
         
-        # Initialize the clock
+        # Initialize the clock and countdown timer
         self.clock = pygame.time.Clock()
         self.FPS = 60
         self.countdownCounter = 3
 
+        # Initialize variables used in Gameplay state (while running a level)
+        # Initialized as None or empty as values depend on the level being run
         self.camera = None
         self.music = None
         self.BPM = None
@@ -39,9 +40,10 @@ class NeverEndingCircles:
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
-        self.tiles = pygame.sprite.Group()
+        # Initialize sprite groups for the players and tiles
         self.player = pygame.sprite.Group()
-        
+        self.tiles = pygame.sprite.Group()
+        # Variable used to turn "Invincible" mode on or off
         self.invincible = False
         
         # Set up text fonts
@@ -49,7 +51,7 @@ class NeverEndingCircles:
         self.mainFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 50)
         self.scoreFont = pygame.font.Font("assets/fonts/UnmaskedBb.ttf", 15)
 
-        # Track key presses of the player
+        # Tracks key presses of the player
         self.keysPressed = {
             "hit": False,
             "enter": False,
@@ -59,20 +61,27 @@ class NeverEndingCircles:
             "r": False
             }
 
-        # Set up game state
+        # Set up and run initial game state
         self.stateStack = []
-        self.loadState()
+        self.titleScreen = Title(self)
+        self.stateStack.append(self.titleScreen)
 
+    # Main loop that runs the game
     def mainLoop(self):
         while True:
+            # Game is run by first getting user key presses, updating sprites
+            # and game states and rendering any text and sprite onto the display
+            # The game state at the top of the stack is the one being run
             self.getKeyPresses()
             self.stateStack[-1].update(self.keysPressed)
             self.stateStack[-1].render(self.screen)
             pygame.display.update()
             self.clock.tick(self.FPS)
 
+    # Gets key presses from user and updates keysPressed dictionary accordingly
     def getKeyPresses(self):
         for event in pygame.event.get():
+            # When a key is pressed down, update its status to True in the dict
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.keysPressed["escape"] = True
@@ -87,7 +96,7 @@ class NeverEndingCircles:
                     self.keysPressed["r"] = True
                 if event.key == pygame.K_RETURN:
                     self.keysPressed["enter"] = True
-
+            # When a key is unpressed, update its status to False in the dict
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     self.keysPressed["escape"] = False
@@ -102,10 +111,11 @@ class NeverEndingCircles:
                     self.keysPressed["r"] = False
                 if event.key == pygame.K_RETURN:
                     self.keysPressed["enter"] = False
-
+            # Decrement countdown timer after specified amount of time
             if event.type == pygame.USEREVENT:
                 self.countdownCounter -= 1
 
+    # Template used to draw text onto the screen
     def drawText(self, display, font, text, color, x, y):
         if font == "Title":
             textImage = self.titleFont.render(text, True, color)
@@ -116,14 +126,14 @@ class NeverEndingCircles:
         textRect = textImage.get_rect(center=(x, y))
         display.blit(textImage, textRect)
 
+    # Reset status of keys to unpressed
+    # Allows key inputs to be recognized only after initial press
     def resetKeysPressed(self):
         for key in self.keysPressed:
             self.keysPressed[key] = False
 
-    def loadState(self):
-        self.titleScreen = Title(self)
-        self.stateStack.append(self.titleScreen)
-
+    # Resets variables related to the running of a level
+    # Allows restarting of levels and loading different levels without rerunning
     def resetLevelState(self):
         self.camera = None
         self.music = None
@@ -134,10 +144,13 @@ class NeverEndingCircles:
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.Group()
 
+    # Resets variables related to keeping track of checkpoints
+    # Seperate from resetLevelState to prevent checkpoint reset after restarting
     def resetCheckpointState(self):
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
 
+# Temporary, used for convenience in testing
 if __name__ == "__main__":
     NeverEndingCircles().mainLoop()

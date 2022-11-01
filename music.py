@@ -3,11 +3,11 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 22nd 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
 This module contains the Music class that is in charge of playing the music
-in the levels.
+in the levels. Class takes musicFile, file path to music file and timePos, 
+time in the music file from which to start from.
 """
 #------------------------------------------------------------------------------
 import vlc
@@ -17,6 +17,7 @@ class Music:
         # Set up music
         self.musicFile = musicFile
         self.timePos = timePos
+        # Set up vlc player
         self.instance = vlc.Instance()
         self.player = self.instance.media_player_new()
         self.music = self.instance.media_new(musicFile)
@@ -28,6 +29,7 @@ class Music:
 
     def startMusic(self):
         self.player.play()
+        # Move to starting time
         self.player.set_time(int(self.timePos))
 
     def pause(self):

@@ -3,10 +3,9 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 15th 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
-This module contains the Tile sprite.
+This module contains the Tile sprite class which initializes tile sprites.
 """
 #------------------------------------------------------------------------------
 import pygame
@@ -14,12 +13,11 @@ import pygame
 class Tile(pygame.sprite.Sprite):
     def __init__(self, wndCenter, pos, tileType, modifier, currentBPM):
         super().__init__()
-        # Set up tile image and rect
+        # Set up tile image, rect and modifier
         self.image = pygame.image.load(
             "assets/images/" + tileType + ".png").convert_alpha()
         self.rect = self.image.get_rect(
             center=(wndCenter[0] + pos[0], wndCenter[1] + pos[1]))
-
         self.modifier = modifier
 
         # If modifier is change in speed
@@ -44,7 +42,6 @@ class Tile(pygame.sprite.Sprite):
             self.modifier = "C"
             self.modifierImage = pygame.image.load(
                 "assets/images/checkpoint.png").convert_alpha()
-
         # Set up mask for collision detection
         self.mask = pygame.mask.from_surface(self.image)
 

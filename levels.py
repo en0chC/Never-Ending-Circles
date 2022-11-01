@@ -3,15 +3,16 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 22nd 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
 This module contains the Levels class which contains the different levels in 
 the game. Format of tiles in level array is '[Modifier][Number of tiles]
-[FromDirection]to[ToDirection]' If the modifier is S 'Change speed', format is 
-'[Modifier][Number of tiles][New BPM][FromDirection]to[ToDirection]'. The
-different modifiers are 'N' - 'Normal tile', 'S' - 'Change speed/BPM', 'R' - 
-'Reverse direction' and 'C' - 'Checkpoint tile'.
+[FromDirection]to[ToDirection]', each section with length "[1][2][1-2]to[1-2]" 
+If the modifier is S 'Change speed', format is 
+'[Modifier][Number of tiles][New BPM][FromDirection]to[ToDirection]' each 
+section with length "[1][2][6][1-2]to[1-2]". The different modifiers are 
+'N' - 'Normal tile', 'S' - 'Change speed/BPM', 'R' - 'Reverse direction' and 
+'C' - 'Checkpoint tile'.
 """
 #------------------------------------------------------------------------------
 from tile import Tile
@@ -20,7 +21,6 @@ class Levels:
     def __init__(self, wndCenter, currentLevel):
         self.wndCenter = wndCenter
         self.currentLevel = currentLevel
-
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
             "assets/music/level1.mp3", 124.3,
@@ -33,7 +33,6 @@ class Levels:
             "R08WtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", 
             "N01WtoN", "N01StoE", "S01031.00WtoE", "N06WtoE"
         ]
-
         self.level2 = [
             "assets/music/level2.mp3", 149,
             "N13WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
@@ -56,15 +55,14 @@ class Levels:
             "N01NtoE", "N01WtoE", "N01WtoN", "N01StoE", "N01WtoE", "N01WtoS",
             "N01NtoW", "N01EtoW"
         ]
-
         # Stores all the level arrays
         self.levels = [self.level1, self.level2]
-    
+        # Keep track of where the next tile should be placed
+        self.nextTileCenter = [0,0]
+
     def loadLevel(self, tiles):
-        # Create tiles sprite group
         self.nextTileCenter = [0,0]
         self.currentBPM = self.levels[self.currentLevel][1]
-
         # Go through each tile in level array
         for tile in self.levels[self.currentLevel][2:]:
             for i in range(int(tile[1:3])):
@@ -95,6 +93,6 @@ class Levels:
                 if tile.split("to")[1] == "W":
                     self.nextTileCenter[0] += -100
 
-        # Return tiles sprite group and BPM of the level
+        # Return tiles sprite group, music file and BPM of the level
         return tiles, self.levels[self.currentLevel][0], \
         self.levels[self.currentLevel][1]

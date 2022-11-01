@@ -20,8 +20,8 @@ TP 2
 
 
 TP 3
+-	Multiple lives to prevent immediate fail
 - 	Speed up multiplier that increases score multiplier
-- 	Invincible mode
 - 	Online Leaderboard
 -	Level Editor (If time allows)
 -	AI creating levels when given a sound file (If time allows)
@@ -50,7 +50,7 @@ Tile Design
 Writing code
 -	1:30pm - 11:00pm
 -	12:30pm - 1:00am
--	1:00am - 3:00am
+-	11:00pm - 1:00am
 Updating Design Docs
 - 	12:30pm - 1:00pm
 

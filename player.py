@@ -3,13 +3,12 @@
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
 # Date Created : October 15th 2022
-# version = '1.0'
 #------------------------------------------------------------------------------
 """
 This module contains the Player sprite. The player class takes type, 
-windowSize, FPS and RPS as parameters. Type determines whether it is the blue 
+windowSize, FPS and BPM as parameters. Type determines whether it is the blue 
 or red circle, windowSize is the size of the display window, FPS is the frames 
-per second and RPS is the rotations per second.
+per second and BPM is the Beats Per Minute.
 """
 #------------------------------------------------------------------------------
 import math # Used for circular motion of circles
@@ -19,8 +18,7 @@ import pygame
 class Player(pygame.sprite.Sprite):
     def __init__(self, type, windowSize, FPS, BPM):
         super().__init__()
-        # Set up blue or orange circle image, rect, moveState, angle and
-        # center of circular motion
+        # Set up blue or orange circle sprite
         if type == "Blue":
             self.image = pygame.image.load(
                 "assets/images/blue_circle.png").convert_alpha()
@@ -56,7 +54,6 @@ class Player(pygame.sprite.Sprite):
             # Clockwise movement by reducing angle
             # Anti-clockwise movement by increasing angle
             self.angle -= self.rotationPerSecond
-
             # Uniform circular motion
             self.rect.center = \
             (self.circMotionCenter[0] + (self.radius*math.sin(self.angle)),
@@ -68,7 +65,6 @@ class Player(pygame.sprite.Sprite):
         distanceToTile = \
         ((nextTile.rect.center[1] - self.rect.center[1])**2 
         + (nextTile.rect.center[0] - self.rect.center[0])**2)**(1/2)
-
         # Calculate change in angle using SOHCAHTOA and set new angle
         self.angle = (self.angle - 2*math.asin(distanceToTile/(2*self.radius)) 
         % (2*math.pi))
@@ -76,19 +72,17 @@ class Player(pygame.sprite.Sprite):
         self.rect.center = nextTile.rect.center
         self.moveState = "Fixed"
 
-
-
+    # Calculates score
     def getScore(self, nextTile):
+        # Calculate distance from circle's center to tile center
         distanceToTile = \
         ((nextTile.rect.center[1] - self.rect.center[1])**2 
         + (nextTile.rect.center[0] - self.rect.center[0])**2)**(1/2)
-
+        # Score system
         if distanceToTile <= 24:
             return "Perfect"
         else:
             return "Far"
-
-
 
     # For the fixed player, update center of circular motion and 
     # starting position of the circular motion relative to moving circle
@@ -103,10 +97,12 @@ class Player(pygame.sprite.Sprite):
     def modifierChanges(self, nextTile):
         # If modifier tile is speed change
         if nextTile.modifier == "S":
+            # Calculate new rotations per second
             self.rotationPerSecond = (((2*math.pi)/(self.FPS)) 
             * (nextTile.modifierBPM/100))
         # If modifier tile is reverse direction
         if nextTile.modifier == "R":
+            # Reverse direction of rotation
             self.rotationPerSecond = -self.rotationPerSecond
 
     # Updates circular movement of circle
