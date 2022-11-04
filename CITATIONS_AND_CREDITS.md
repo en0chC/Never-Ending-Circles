@@ -19,3 +19,7 @@ A Dance of Fire and Ice - https://store.steampowered.com/app/977950/A_Dance_of_F
 # Fonts
 godoMaum - https://www.sandollcloud.com/font/16058.html?lang=en_US
 Unmasked BB - https://www.fontspace.com/unmasked-bb-font-f10132
+
+# Backgrounds
+World 1 - https://wallpaperaccess.com/wide-hd
+World 2 - https://wallpaper.dog/wide

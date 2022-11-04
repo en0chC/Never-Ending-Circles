@@ -37,6 +37,7 @@ class NeverEndingCircles:
         self.music = None
         self.BPM = None
         self.levels = None
+        self.background = None
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
@@ -70,7 +71,7 @@ class NeverEndingCircles:
     def mainLoop(self):
         while True:
             # Game is run by first getting user key presses, updating sprites
-            # and game states and rendering any text and sprite onto the display
+            # and game states and rendering any text and sprite onto screen
             # The game state at the top of the stack is the one being run
             self.getKeyPresses()
             self.stateStack[-1].update(self.keysPressed)
@@ -133,19 +134,20 @@ class NeverEndingCircles:
             self.keysPressed[key] = False
 
     # Resets variables related to the running of a level
-    # Allows restarting of levels and loading different levels without rerunning
+    # Allows restarting of levels and loading other levels without rerunning
     def resetLevelState(self):
         self.camera = None
         self.music = None
         self.BPM = None
         self.levels = None
+        self.background = None
         self.countdownCounter = 3
         pygame.time.set_timer(pygame.USEREVENT, 0)
         self.tiles = pygame.sprite.Group()
         self.player = pygame.sprite.Group()
 
     # Resets variables related to keeping track of checkpoints
-    # Seperate from resetLevelState to prevent checkpoint reset after restarting
+    # Seperate from resetLevelState, prevents checkpoint reset after restarting
     def resetCheckpointState(self):
         self.checkpoints = [0]
         self.checkpointScore = [0]

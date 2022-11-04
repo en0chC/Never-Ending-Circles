@@ -23,7 +23,8 @@ class Levels:
         self.currentLevel = currentLevel
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.mp3", 124.3,
+            "assets/music/level1.mp3", 124.3, 
+            "assets/images/backgrounds/world1.jpg",
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N05WtoE", "C01WtoE", "N06WtoE", 
@@ -34,7 +35,8 @@ class Levels:
             "N01WtoN", "N01StoE", "S01031.00WtoE", "N06WtoE"
         ]
         self.level2 = [
-            "assets/music/level2.mp3", 150,
+            "assets/music/level2.mp3", 149.8,
+            "assets/images/backgrounds/world2.jpg",
             "N29WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N05WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N09WtoE", "N01WtoS", "N01NtoW", "N01EtoS", "N01NtoE", "N01WtoS", 
@@ -65,7 +67,7 @@ class Levels:
         self.nextTileCenter = [0,0]
         self.currentBPM = self.levels[self.currentLevel][1]
         # Go through each tile in level array
-        for tile in self.levels[self.currentLevel][2:]:
+        for tile in self.levels[self.currentLevel][3:]:
             for i in range(int(tile[1:3])):
                 # If normal tile
                 if tile[0] == "N":
@@ -96,4 +98,4 @@ class Levels:
 
         # Return tiles sprite group, music file and BPM of the level
         return tiles, self.levels[self.currentLevel][0], \
-        self.levels[self.currentLevel][1]
+        self.levels[self.currentLevel][1], self.levels[self.currentLevel][2]

@@ -22,6 +22,7 @@ from levels import Levels
 from music import Music
 from player import Player
 from camera import Camera
+from background import Background
 
 # Parent class that game state child classes inherit from
 class GameState:
@@ -172,10 +173,11 @@ class LevelTransition(GameState):
         # Empty tile sprite group to unload any previously played level
         self.game.tiles.empty()
         # Load the level and initialize level related variables
-        self.game.tiles, self.game.music, self.game.BPM = \
+        self.game.tiles, self.game.music, self.game.BPM, backgroundFile = \
             self.game.levels.loadLevel(self.game.tiles)
         self.game.music = Music(self.game.music, 
             self.game.checkpointMusicTime[-1])
+        self.game.background = Background(self.game, backgroundFile)
 
         # Empty previously loaded players and add again to reset their variables
         self.game.player.empty()
@@ -197,6 +199,7 @@ class LevelTransition(GameState):
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.background.image, self.game.background.rect)
         self.game.tiles.draw(screen)
         self.game.player.draw(screen)
 
@@ -209,6 +212,8 @@ class LevelTransition(GameState):
         while tileCounter <= self.game.checkpoints[-1]:
             # Center the camera onto the current tile by calculating offset
             self.game.camera.centerCam(tilesList[tileCounter])
+            self.game.background.rect.x -= self.game.camera.offset.x / 5
+            self.game.background.rect.y -= self.game.camera.offset.y / 5
             # Offset the coordinates of each tile accordingly
             for tile in self.game.tiles.sprites():
                 tile.rect.x -= self.game.camera.offset.x
@@ -277,7 +282,10 @@ class Gameplay(GameState):
         self.game.resetKeysPressed()
 
     def render(self, screen):
+        blueCircle = self.game.player.sprites()[0]
+        orangeCircle = self.game.player.sprites()[1]
         screen.fill((0, 0, 0))
+        screen.blit(self.game.background.image, self.game.background.rect)
         # Draw the tiles, players and text onto the screen
         self.game.tiles.draw(screen)
         self.game.tiles.update(screen)
@@ -289,14 +297,26 @@ class Gameplay(GameState):
             self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
             (255, 255, 255), self.game.wndCenter[0]*0.28, 
             self.game.wndSize[1]*0.08)
-            if self.scoreType != None and self.scoreType == "Perfect":
+            if self.scoreType != None and self.scoreType == "Perfect" and \
+            orangeCircle.moveState == "Fixed":
                 self.game.drawText(screen, "Score", self.scoreType,
-                (122, 178, 131), self.game.wndSize[0]*0.49, 
-                self.game.wndSize[1]*0.47)
-            if self.scoreType != None and self.scoreType == "Far":
+                (122, 178, 131), orangeCircle.rect.center[0]*0.95, 
+                orangeCircle.rect.center[1]*0.93)
+            if self.scoreType != None and self.scoreType == "Far" and \
+            orangeCircle.moveState == "Fixed":
                 self.game.drawText(screen, "Score", self.scoreType,
-                (211, 81, 84), self.game.wndSize[0]*0.49, 
-                self.game.wndSize[1]*0.47)
+                (211, 81, 84),  orangeCircle.rect.center[0]*0.95, 
+                orangeCircle.rect.center[1]*0.93)
+            if self.scoreType != None and self.scoreType == "Perfect" and \
+            blueCircle.moveState == "Fixed":
+                self.game.drawText(screen, "Score", self.scoreType,
+                (122, 178, 131), blueCircle.rect.center[0]*0.95, 
+                blueCircle.rect.center[1]*0.93)
+            if self.scoreType != None and self.scoreType == "Perfect" and \
+            blueCircle.moveState == "Fixed":
+                self.game.drawText(screen, "Score", self.scoreType,
+                (122, 178, 131), blueCircle.rect.center[0]*0.95, 
+                blueCircle.rect.center[1]*0.93)
         if self.gameState == "Failed":
             self.game.drawText(screen, "Main", "Press r to restart",
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
@@ -380,8 +400,6 @@ class Gameplay(GameState):
             # Snap circle to tile, update the center of circular motion
             # of other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
-            # Update camera offset
-            self.game.camera.centerCam(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             # Player has successfully pressed hit button on time
@@ -408,7 +426,6 @@ class Gameplay(GameState):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
             orangeCircle.snapToTile(nextTile)
-            self.game.camera.centerCam(orangeCircle)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
@@ -439,7 +456,6 @@ class Gameplay(GameState):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
             blueCircle.snapToTile(nextTile)
-            self.game.camera.centerCam(blueCircle)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
@@ -467,22 +483,27 @@ class Gameplay(GameState):
                 self.game.checkpointMusicTime.append(
                 self.startingCheckpoint + self.game.music.getPos() + 800)
             orangeCircle.snapToTile(nextTile)
-            self.game.camera.centerCam(orangeCircle)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
 
+        # Update camera offset relative to the fixed circle
+        if blueCircle.moveState == "Fixed":
+            self.game.camera.updateOffset(blueCircle)
+        else:
+            self.game.camera.updateOffset(orangeCircle)
+        self.game.background.rect.x += self.game.camera.offsetdx / 5
+        self.game.background.rect.y += self.game.camera.offsetdy / 5
         # Update camera offset and move sprites appropriately
         for sprite in self.game.player.sprites():
-            # If player sprite is not moving and is not centered on the screen
-            if sprite.moveState == "Fixed" and \
-            sprite.rect.center != self.game.wndCenter:
-                # Center the fixed player
-                sprite.rect.center = self.game.wndCenter
-                # Go through each tile and offset their positions
-                for tile in self.game.tiles.sprites():
-                    tile.rect.x -= self.game.camera.offset.x
-                    tile.rect.y -= self.game.camera.offset.y
+            # Move player towards the center of the screen
+            sprite.rect.x += self.game.camera.offsetdx
+            sprite.rect.y += self.game.camera.offsetdy
+        # Go through each tile and offset their positions
+        for tile in self.game.tiles.sprites():
+            # Move tile towards the center of the screen
+            tile.rect.x += self.game.camera.offsetdx
+            tile.rect.y += self.game.camera.offsetdy
         # Once final tile is reached, set game state to failed
         if self.nextTileIndex == len(self.game.tiles.sprites()):
             self.gameState = "Won"
@@ -491,6 +512,24 @@ class Gameplay(GameState):
         self.game.music.stopMusic()
 
     def won(self, keysPressed):
+        blueCircle = self.game.player.sprites()[0]
+        orangeCircle = self.game.player.sprites()[1]
+        # Update camera offset relative to the fixed circle
+        if blueCircle.moveState == "Fixed":
+            self.game.camera.updateOffset(blueCircle)
+        else:
+            self.game.camera.updateOffset(orangeCircle)
+        # Update camera offset and move sprites appropriately
+        for sprite in self.game.player.sprites():
+            # Move player towards the center of the screen
+            sprite.rect.x += self.game.camera.offsetdx
+            sprite.rect.y += self.game.camera.offsetdy
+        # Go through each tile and offset their positions
+        for tile in self.game.tiles.sprites():
+            # Move tile towards the center of the screen
+            tile.rect.x += self.game.camera.offsetdx
+            tile.rect.y += self.game.camera.offsetdy
+
         if keysPressed["enter"]:
             # Return to main menu
             while len(self.game.stateStack) != 2:

@@ -2,14 +2,16 @@
 # -*- coding: utf-8 -*-
 #------------------------------------------------------------------------------
 # Author : Enoch Luis S Catuncan
-# Date Created : October 15th 2022
+# Date Created : November 4th 2022
 #------------------------------------------------------------------------------
 """
-This module is the python file that will be run to starting the game.
+This module contains the background class which handles the background in
+levels.
 """
 #------------------------------------------------------------------------------
-from neverEndingCircles import NeverEndingCircles
+import pygame
 
-if __name__ == "__main__":
-    neverEndingCircles = NeverEndingCircles()
-    neverEndingCircles.mainLoop()
+class Background:
+    def __init__(self, game, backgroundFile):
+        self.image = pygame.image.load(backgroundFile)
+        self.rect = self.image.get_rect()

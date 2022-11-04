@@ -16,8 +16,25 @@ class Camera:
     def __init__(self, windowSize):
         self.wndCenter = (windowSize[0]//2, windowSize[1]//2)
         self.offset = pygame.math.Vector2()
+        self.offsetdx = 0
+        self.offsetdy = 0
 
-    # Calculates offset from player's position to center of the screen
     def centerCam(self, player):
         self.offset.x = player.rect.center[0] - self.wndCenter[0]
         self.offset.y = player.rect.center[1] - self.wndCenter[1]
+
+    # Calculates offset from player's position to center of the screen
+    def updateOffset(self, player):
+        if player.rect.center[0] > self.wndCenter[0]:
+            self.offsetdx = -5
+        elif player.rect.center[0] < self.wndCenter[0]:
+            self.offsetdx = 5
+        else:
+            self.offsetdx = 0
+
+        if player.rect.center[1] > self.wndCenter[1]:
+            self.offsetdy = -5
+        elif player.rect.center[1] < self.wndCenter[1]:
+            self.offsetdy = 5
+        else:
+            self.offsetdy = 0

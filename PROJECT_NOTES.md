@@ -84,3 +84,14 @@ Updating Design Docs
 -	No save file system, user scores will be stored on a server
 -	It seems that pygame mixer has a starting positioning inaccuracy
 	so I may need to use another library
+
+
+
+# TP2 Progress
+-	Smooth camera
+-	Background
+
+
+# TP2 Updates
+-	Renamed game.py to neverEndingCircles.py
+-	background.py
