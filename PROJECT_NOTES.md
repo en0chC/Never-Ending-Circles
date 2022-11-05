@@ -89,12 +89,21 @@ Writing code
 
 
 
-# TP2 Progress
+# TP3 To Do
+-	Add 3 more levels
+-	Particle effects
+-	Checkpoints - Fix music bug
+
+
+
+# TP3 Progress
 -	Smooth camera
 -	Level backgrounds
+-	Added leaderboard functionality
 
 
-# TP2 Updates
+
+# TP3 Updates
 -	Renamed game.py to neverEndingCircles.py
 -	background.py
 -	server.py
