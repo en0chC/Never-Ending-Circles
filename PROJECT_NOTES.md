@@ -55,7 +55,7 @@ Updating Design Docs
 - 	12:30pm - 1:00pm
 TP3:
 Writing code
--	11:00am - 
+-	11:00am - 10:00pm
 
 
 # TP2 Progress
