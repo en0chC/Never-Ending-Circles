@@ -53,7 +53,9 @@ Writing code
 -	11:00pm - 1:00am
 Updating Design Docs
 - 	12:30pm - 1:00pm
-
+TP3:
+Writing code
+-	11:00am - 
 
 
 # TP2 Progress
@@ -89,9 +91,10 @@ Updating Design Docs
 
 # TP2 Progress
 -	Smooth camera
--	Background
+-	Level backgrounds
 
 
 # TP2 Updates
 -	Renamed game.py to neverEndingCircles.py
 -	background.py
+-	server.py

@@ -22,4 +22,4 @@ Unmasked BB - https://www.fontspace.com/unmasked-bb-font-f10132
 
 # Backgrounds
 World 1 - https://wallpaperaccess.com/wide-hd
-World 2 - https://wallpaper.dog/wide
+World 2 - http://wallpaperswide.com/outrun-wallpapers.html

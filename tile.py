@@ -20,6 +20,13 @@ class Tile(pygame.sprite.Sprite):
             center=(wndCenter[0] + pos[0], wndCenter[1] + pos[1]))
         self.modifier = modifier
 
+        # Set up mask for collision detection and scale up
+        self.maskImage = pygame.image.load(
+            "assets/images/" + tileType + ".png").convert_alpha()
+        self.maskRect = self.image.get_rect(
+            center=(wndCenter[0] + pos[0] - 20, wndCenter[1] + pos[1] - 20))
+        self.mask = pygame.mask.from_surface(self.maskImage).scale((150, 150))
+
         # If modifier is change in speed
         if modifier[0] == "S":
             self.modifier = "S"
@@ -42,8 +49,6 @@ class Tile(pygame.sprite.Sprite):
             self.modifier = "C"
             self.modifierImage = pygame.image.load(
                 "assets/images/checkpoint.png").convert_alpha()
-        # Set up mask for collision detection
-        self.mask = pygame.mask.from_surface(self.image)
 
     # Update the modifier image of the tile
     def updateModifierImage(self, screen):

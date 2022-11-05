@@ -9,15 +9,28 @@ This module contains the main logic of the game and is what will be imported
 by the __main__ file.
 """
 #------------------------------------------------------------------------------
+from tkinter import Tk
+#------------------------------------------------------------------------------
 import pygame
 #------------------------------------------------------------------------------
 from gameStates import Title
+from server import Server, loginWindow
 
 class NeverEndingCircles:
     def __init__(self):
         # Initialize pygame and set title of the display window
         pygame.init()
         pygame.display.set_caption("Never Ending Circles")
+
+        self.server = Server()
+        self.username = None
+        self.loggedin = False
+
+        loginWindow(Tk(), self.server, self)
+        
+        if not self.loggedin:
+            quit()
+
 
         # Set up display window to fullscreen
         self.wndSize = (
@@ -44,8 +57,10 @@ class NeverEndingCircles:
         # Initialize sprite groups for the players and tiles
         self.player = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
+
         # Variable used to turn "Invincible" mode on or off
         self.invincible = False
+        self.turnedOnInvincible = False
         
         # Set up text fonts
         self.titleFont = pygame.font.Font("assets/fonts/GodoMaum.ttf", 140)

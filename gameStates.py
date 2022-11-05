@@ -14,6 +14,7 @@ whichever state class is at the top of the stack.
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
+import tkinter
 #------------------------------------------------------------------------------
 import pygame
 from pygame import mixer
@@ -63,10 +64,11 @@ class MainMenu(GameState):
         super().__init__(game)
         self.game = game
         # Keeps track of the menu option being currently selected
-        self.menuOptions = ["Start", "Exit"]
+        self.menuOptions = ["Start", "Leaderboards", "Exit"]
         self.menuIndex = 0
         # Color of the text to show user which one is currently highlighted
         self.startColor = (211, 81, 84)
+        self.leaderboardsColor = (255, 255, 255)
         self.exitColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -75,6 +77,9 @@ class MainMenu(GameState):
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Start":
                 newState = LevelSelect(self.game)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Leaderboards":
+                newState = Leaderboards(self.game)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Exit":
                 pygame.quit()
@@ -87,8 +92,10 @@ class MainMenu(GameState):
         (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
         self.game.drawText(screen, "Main", "Start",
         self.startColor, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
+        self.game.drawText(screen, "Main", "Leaderboards",
+        self.leaderboardsColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Exit",
-        self.exitColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.exitColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
 
     # Updates the menu option being selected
     def updateSelected(self, keysPressed):
@@ -100,11 +107,119 @@ class MainMenu(GameState):
             self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
         # Revert to white and change text color to orange if currently selected
         self.startColor = (255, 255, 255)
+        self.leaderboardsColor = (255, 255, 255)
         self.exitColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.startColor = (211, 81, 84)
         if self.menuIndex == 1:
+            self.leaderboardsColor = (211, 81, 84)
+        if self.menuIndex == 2:
             self.exitColor = (211, 81, 84)
+
+# Leaderboards menu
+class Leaderboards(GameState):
+    def __init__(self, game):
+        super().__init__(game)
+        self.game = game
+        self.menuOptions = ["Level1", "Level2", "Back"]
+        self.menuIndex = 0
+        self.level1Color = (211, 81, 84)
+        self.level2Color = (255, 255, 255)
+        self.backColor = (255, 255, 255)
+    
+    def update(self, keysPressed):
+        self.updateSelected(keysPressed)
+        if keysPressed["enter"]:
+            if self.menuOptions[self.menuIndex] == "Level1":
+                # Reset checkpoint related variables when opening a level
+                # Prevents carryover of checkpoints after playing other levels
+                self.game.resetCheckpointState()
+                newState = LeaderboardList(self.game, 0)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level2":
+                self.game.resetCheckpointState()
+                newState = LeaderboardList(self.game, 1)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Back":
+                self.game.stateStack.pop()
+        self.game.resetKeysPressed()
+
+    def render(self, screen):
+        screen.fill((0, 0, 0))
+        self.game.drawText(screen, "Title", "Leaderboards", 
+        (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
+        self.game.drawText(screen, "Main", "Level 1",
+        self.level1Color, self.game.wndCenter[0], self.game.wndSize[1]*0.4)
+        self.game.drawText(screen, "Main", "Level 2",
+        self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
+        self.game.drawText(screen, "Main", "Back",
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+
+    def updateSelected(self, keysPressed):
+        if keysPressed["up"]:
+            self.menuIndex = (self.menuIndex - 1) % len(self.menuOptions)
+        elif keysPressed["down"]:
+            self.menuIndex = (self.menuIndex + 1) % len(self.menuOptions)
+
+        self.level1Color = (255, 255, 255)
+        self.level2Color = (255, 255, 255)
+        self.backColor = (255, 255, 255)
+        if self.menuIndex == 0:
+            self.level1Color = (211, 81, 84)
+        if self.menuIndex == 1:
+            self.level2Color = (211, 81, 84)
+        if self.menuIndex == 2:
+            self.backColor = (211, 81, 84)
+
+class LeaderboardList(GameState):
+    def __init__(self, game, level):
+        super().__init__(game)
+        self.game = game
+        self.level = level
+        self.users = []
+        self.scores = []
+        self.getUserScores()
+    
+    def update(self, keysPressed):
+        if keysPressed["enter"]:
+            self.game.stateStack.pop()
+        self.game.resetKeysPressed()
+
+    def render(self, screen):
+        screen.fill((0, 0, 0))
+        self.game.drawText(screen, "Title", "Level " + str(self.level + 1), 
+        (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
+        for i in range(5):
+            self.game.drawText(screen, "Main", 
+            str(i + 1) + ". " + self.users[i] + ": " + str(self.scores[i]),
+            (255, 255, 255), self.game.wndCenter[0], 
+            self.game.wndSize[1]*((i + 3) / 10))
+        self.game.drawText(screen, "Main", "Back",
+        (211, 81, 84), self.game.wndCenter[0], self.game.wndSize[1]*0.9)
+
+    def getUserScores(self):
+        users = self.game.server.getUsers()
+        scores = []
+        for i in range(len(users)):
+            scores += [self.game.server.getUserScore(users[i], self.level)]
+        self.users, self.scores = self.bubbleSort(users, scores)
+        
+    def bubbleSort(self, users, scores):
+        endIndex = len(scores) - 1
+        sorted = False
+        while endIndex >= 0 and not sorted:
+            sorted = True
+            for i in range(endIndex):
+                if scores[i + 1] > scores[i]:
+                    temp = scores[i]
+                    scores[i] = scores[i + 1]
+                    scores[i + 1] = temp
+                    temp = users[i]
+                    users[i] = users[i + 1]
+                    users[i + 1] = temp
+                    sorted = False
+            endIndex -= 1
+        return users, scores
 
 # Level select menu, works exactly like the main menu
 class LevelSelect(GameState):
@@ -173,11 +288,11 @@ class LevelTransition(GameState):
         # Empty tile sprite group to unload any previously played level
         self.game.tiles.empty()
         # Load the level and initialize level related variables
-        self.game.tiles, self.game.music, self.game.BPM, backgroundFile = \
-            self.game.levels.loadLevel(self.game.tiles)
+        self.game.tiles, self.game.music, self.game.BPM, backgroundFile, \
+        backgroundStartPos = self.game.levels.loadLevel(self.game.tiles)
         self.game.music = Music(self.game.music, 
             self.game.checkpointMusicTime[-1])
-        self.game.background = Background(self.game, backgroundFile)
+        self.game.background = Background(backgroundFile, backgroundStartPos)
 
         # Empty previously loaded players and add again to reset their variables
         self.game.player.empty()
@@ -232,6 +347,7 @@ class Gameplay(GameState):
         self.startingCheckpoint = self.game.checkpoints[-1]
         # Used to check if the circle is currently overlapping the tile
         self.passedTile = False
+        self.turnedOnInvincible = False
 
         # Initialize score variables
         self.score = self.game.checkpointScore[-1]
@@ -240,6 +356,7 @@ class Gameplay(GameState):
 
         # Initialize music and sound effects
         self.failSound = mixer.Sound("assets/sound/fail.mp3")
+        self.secondChanceSound = mixer.Sound("assets/sound/secondChance.mp3")
         self.musicFile = self.game.music.musicFile
         self.game.music = Music(self.musicFile, 
             self.game.checkpointMusicTime[-1])
@@ -290,13 +407,13 @@ class Gameplay(GameState):
         self.game.tiles.draw(screen)
         self.game.tiles.update(screen)
         self.game.player.draw(screen)
+        self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
+        (255, 255, 255), self.game.wndCenter[0]*0.28, 
+        self.game.wndSize[1]*0.08)
         if self.gameState == "Countdown":
             self.game.drawText(screen, "Main", str(self.game.countdownCounter),
             (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.25)
         if self.gameState == "Gameplay":
-            self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
-            (255, 255, 255), self.game.wndCenter[0]*0.28, 
-            self.game.wndSize[1]*0.08)
             if self.scoreType != None and self.scoreType == "Perfect" and \
             orangeCircle.moveState == "Fixed":
                 self.game.drawText(screen, "Score", self.scoreType,
@@ -312,10 +429,10 @@ class Gameplay(GameState):
                 self.game.drawText(screen, "Score", self.scoreType,
                 (122, 178, 131), blueCircle.rect.center[0]*0.95, 
                 blueCircle.rect.center[1]*0.93)
-            if self.scoreType != None and self.scoreType == "Perfect" and \
+            if self.scoreType != None and self.scoreType == "Far" and \
             blueCircle.moveState == "Fixed":
                 self.game.drawText(screen, "Score", self.scoreType,
-                (122, 178, 131), blueCircle.rect.center[0]*0.95, 
+                (211, 81, 84), blueCircle.rect.center[0]*0.95, 
                 blueCircle.rect.center[1]*0.93)
         if self.gameState == "Failed":
             self.game.drawText(screen, "Main", "Press r to restart",
@@ -359,13 +476,15 @@ class Gameplay(GameState):
         # If circle has passed over the tile and no longer colliding with tile
         # that means player has failed to press the hit key on time
         elif self.passedTile == True and \
-        not pygame.sprite.collide_mask(blueCircle, nextTile) and \
-        not pygame.sprite.collide_mask(orangeCircle, nextTile):
+        ((not pygame.sprite.collide_mask(blueCircle, nextTile) and 
+        blueCircle.moveState == "Move") or
+        (not pygame.sprite.collide_mask(orangeCircle, nextTile) and
+        orangeCircle.moveState == "Move")):
             # Play fail sound effect and set the game state to failed
             self.failSound.play()
             self.gameState = "Failed"
             self.game.music.stopMusic()
-
+                
         # If the blue circle is overlaping the tile, "Invincible" mode is on and
         # its coordinates is close to the center of the next tile's center
         if pygame.sprite.collide_mask(blueCircle, nextTile) and\
@@ -506,6 +625,9 @@ class Gameplay(GameState):
             tile.rect.y += self.game.camera.offsetdy
         # Once final tile is reached, set game state to failed
         if self.nextTileIndex == len(self.game.tiles.sprites()):
+            if not self.game.turnedOnInvincible:
+                self.game.server.updateUserScore(self.game.username, 
+                self.game.levels.currentLevel, self.score)
             self.gameState = "Won"
 
     def failed(self):
@@ -531,6 +653,8 @@ class Gameplay(GameState):
             tile.rect.y += self.game.camera.offsetdy
 
         if keysPressed["enter"]:
+            self.game.turnedOnInvincible = False
+            self.game.invincible = False
             # Return to main menu
             while len(self.game.stateStack) != 2:
                 self.game.stateStack.pop()
@@ -554,6 +678,7 @@ class PauseMenu(GameState):
                 self.game.stateStack.pop()
             if self.menuOptions[self.menuIndex] == "Invincible":
                 # Toggle invincible mode
+                self.game.turnedOnInvincible = True
                 if self.game.invincible:
                     self.game.invincible = False
                 else:
@@ -561,6 +686,8 @@ class PauseMenu(GameState):
             if self.menuOptions[self.menuIndex] == "ExitToMainMenu":
                 # Return to main menu state
                 self.game.resetLevelState()
+                self.game.turnedOnInvincible = False
+                self.game.invincible = False
                 while len(self.game.stateStack) != 2:
                     self.game.stateStack.pop()
         self.game.resetKeysPressed()
