@@ -14,7 +14,6 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, wndCenter, pos, tileType, modifier, currentBPM):
         super().__init__()
         # Set up tile image, rect and modifier
-        print(tileType)
         self.image = pygame.image.load(
             "assets/images/" + tileType + ".png").convert_alpha()
         self.rect = self.image.get_rect(
@@ -25,7 +24,7 @@ class Tile(pygame.sprite.Sprite):
         self.maskImage = pygame.image.load(
             "assets/images/" + tileType + ".png").convert_alpha()
         self.maskRect = self.image.get_rect(
-            center=(wndCenter[0] + pos[0] - 20, wndCenter[1] + pos[1] - 20))
+            center=(wndCenter[0] + pos[0] - 50, wndCenter[1] + pos[1] - 50))
         self.mask = pygame.mask.from_surface(self.maskImage).scale((150, 150))
 
         # If modifier is change in speed

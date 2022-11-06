@@ -23,20 +23,23 @@ class Levels:
         self.currentLevel = currentLevel
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
-            "assets/music/level1.mp3", 124.3, 
+            "assets/music/level1.mp3", 124, 
             "assets/images/backgrounds/world1.jpg", 250,
+            750,
             "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N05WtoE", "C01WtoE", "N06WtoE", 
             "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
             "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N01WtoS", 
             "N01NtoE", "N12WtoE", "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", 
-            "R08WtoE", "N01WtoS", "N01NtoE", "N01WtoS", "N01NtoE", "N02WtoE", 
-            "N01WtoN", "N01StoE", "S01031.00WtoE", "N06WtoE"
+            "N03WtoE", "R02WtoE", "N03WtoE", "N01WtoS", "N01NtoE", "N01WtoS", 
+            "N01NtoE", "N02WtoE", "N01WtoN", "N01StoE", "S01031.00WtoE", 
+            "N06WtoE"
         ]
         self.level2 = [
             "assets/music/level2.mp3", 149.5,
             "assets/images/backgrounds/world2.jpg", 0,
+            600,
             "N29WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N05WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N09WtoE", "N01WtoS", "N01NtoW", "N01EtoS", "N01NtoE", "N01WtoS", 
@@ -59,8 +62,9 @@ class Levels:
             "N01NtoW", "N01EtoW"
         ]
         self.level3 = [
-            "assets/music/level3.mp3", 150,
-            "assets/images/backgrounds/world3.jpg", 0,
+            "assets/music/level3.mp3", 90,
+            "assets/images/backgrounds/world3.jpg", 400,
+            150,
             "N01WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", 
             "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoE", "N01WtoNE", 
             "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE",
@@ -99,7 +103,7 @@ class Levels:
         self.nextTileCenter = [0,0]
         self.currentBPM = self.levels[self.currentLevel][1]
         # Go through each tile in level array
-        for tile in self.levels[self.currentLevel][4:]:
+        for tile in self.levels[self.currentLevel][5:]:
             for i in range(int(tile[1:3])):
                 # If normal tile
                 if tile[0] == "N":
@@ -133,16 +137,16 @@ class Levels:
                 tile.split("to")[0][-2] == "SE" or \
                 tile.split("to")[0][-2] == "SW":
                     if tile.split("to")[1] == "NE":
-                        self.nextTileCenter[0] += 120
+                        self.nextTileCenter[0] += 119
                         self.nextTileCenter[1] -= 120
                     if tile.split("to")[1] == "NW":
-                        self.nextTileCenter[0] -= 120
+                        self.nextTileCenter[0] -= 119
                         self.nextTileCenter[1] -= 120
                     if tile.split("to")[1] == "SE":
-                        self.nextTileCenter[0] += 120
+                        self.nextTileCenter[0] += 119
                         self.nextTileCenter[1] += 120
                     if tile.split("to")[1] == "SW":
-                        self.nextTileCenter[0] -= 120
+                        self.nextTileCenter[0] -= 119
                         self.nextTileCenter[1] += 120
 
                 if tile.split("to")[1] == "NE":
@@ -162,4 +166,4 @@ class Levels:
         # file and starting position of the background
         return tiles, self.levels[self.currentLevel][0], \
         self.levels[self.currentLevel][1], self.levels[self.currentLevel][2], \
-        self.levels[self.currentLevel][3]
+        self.levels[self.currentLevel][3], self.levels[self.currentLevel][4]

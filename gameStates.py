@@ -303,7 +303,8 @@ class LevelTransition(GameState):
         self.game.tiles.empty()
         # Load the level and initialize level related variables
         self.game.tiles, self.game.music, self.game.BPM, backgroundFile, \
-        backgroundStartPos = self.game.levels.loadLevel(self.game.tiles)
+        backgroundStartPos, self.game.counterTimer = \
+        self.game.levels.loadLevel(self.game.tiles)
         self.game.music = Music(self.game.music, 
             self.game.checkpointMusicTime[-1])
         self.game.background = Background(backgroundFile, backgroundStartPos)
@@ -380,7 +381,7 @@ class Gameplay(GameState):
             # Set the timer according to the BPM of the music
             # This makes sure countdown reaches 0 right before the circle
             # overlaps the next tile
-            pygame.time.set_timer(pygame.USEREVENT, int((self.game.BPM) * 10))
+            pygame.time.set_timer(pygame.USEREVENT, self.game.counterTimer)
             self.gameState = "Countdown"
         if keysPressed["escape"] and self.gameState != "Countdown":
             # Enter the pause menu
@@ -481,10 +482,10 @@ class Gameplay(GameState):
 
         # Check if the circle is overlapping the tile and game fail condition
         # If the moving circle has collided with the next tile
-        if (pygame.sprite.collide_mask(blueCircle, nextTile) and 
+        if ((pygame.sprite.collide_mask(blueCircle, nextTile) and 
         blueCircle.moveState == "Move") or \
         (pygame.sprite.collide_mask(orangeCircle, nextTile) and
-        orangeCircle.moveState == "Move"):
+        orangeCircle.moveState == "Move")):
             # Circle is currently overlapping with the tile
             self.passedTile = True
         # If circle has passed over the tile and no longer colliding with tile
@@ -501,7 +502,7 @@ class Gameplay(GameState):
                 
         # If the blue circle is overlaping the tile, "Invincible" mode is on and
         # its coordinates is close to the center of the next tile's center
-        if pygame.sprite.collide_mask(blueCircle, nextTile) and\
+        if pygame.sprite.collide_mask(blueCircle, nextTile) and \
         self.game.invincible and \
         abs(blueCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
         abs(blueCircle.rect.center[1] - nextTile.rect.center[1]) <= 10:
@@ -538,7 +539,7 @@ class Gameplay(GameState):
             # Player has successfully pressed hit button on time
             self.passedTile = False
         # Same as previous, just for orange circle
-        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and\
+        elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
         self.game.invincible and \
         abs(orangeCircle.rect.center[0] - nextTile.rect.center[0]) <= 10 and \
         abs(orangeCircle.rect.center[1] - nextTile.rect.center[1]) <= 10:

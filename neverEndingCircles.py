@@ -43,6 +43,7 @@ class NeverEndingCircles:
         self.clock = pygame.time.Clock()
         self.FPS = 60
         self.countdownCounter = 3
+        self.counterTimer = None
 
         # Initialize variables used in Gameplay state (while running a level)
         # Initialized as None or empty as values depend on the level being run
@@ -108,6 +109,7 @@ class NeverEndingCircles:
                 if event.key == pygame.K_f or event.key == pygame.K_j or \
                 event.key == pygame.K_d or event.key == pygame.K_k:
                     self.keysPressed["hit"] = True
+                    pygame.time.set_timer(pygame.USEREVENT + 1, 200)
                 if event.key == pygame.K_r:
                     self.keysPressed["r"] = True
                 if event.key == pygame.K_RETURN:
@@ -120,9 +122,6 @@ class NeverEndingCircles:
                     self.keysPressed["up"] = False
                 if event.key == pygame.K_s or event.key == pygame.K_DOWN:
                     self.keysPressed["down"] = False
-                if event.key == pygame.K_f or event.key == pygame.K_j or \
-                event.key == pygame.K_d or event.key == pygame.K_k:
-                    self.keysPressed["hit"] = False
                 if event.key == pygame.K_r:
                     self.keysPressed["r"] = False
                 if event.key == pygame.K_RETURN:
@@ -130,6 +129,9 @@ class NeverEndingCircles:
             # Decrement countdown timer after specified amount of time
             if event.type == pygame.USEREVENT:
                 self.countdownCounter -= 1
+            if event.type == pygame.USEREVENT + 1:
+                self.keysPressed["hit"] = False
+                pygame.time.set_timer(pygame.USEREVENT + 1, 0)
 
     # Template used to draw text onto the screen
     def drawText(self, display, font, text, color, x, y):
@@ -146,7 +148,8 @@ class NeverEndingCircles:
     # Allows key inputs to be recognized only after initial press
     def resetKeysPressed(self):
         for key in self.keysPressed:
-            self.keysPressed[key] = False
+            if key != "hit":
+                self.keysPressed[key] = False
 
     # Resets variables related to the running of a level
     # Allows restarting of levels and loading other levels without rerunning
