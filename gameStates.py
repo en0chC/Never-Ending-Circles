@@ -14,7 +14,6 @@ whichever state class is at the top of the stack.
 """
 #------------------------------------------------------------------------------
 from sys import exit # Used to exit the game
-import tkinter
 #------------------------------------------------------------------------------
 import pygame
 from pygame import mixer
@@ -121,24 +120,24 @@ class Leaderboards(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
+        self.level3Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
         self.updateSelected(keysPressed)
         if keysPressed["enter"]:
             if self.menuOptions[self.menuIndex] == "Level1":
-                # Reset checkpoint related variables when opening a level
-                # Prevents carryover of checkpoints after playing other levels
-                self.game.resetCheckpointState()
                 newState = LeaderboardList(self.game, 0)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Level2":
-                self.game.resetCheckpointState()
                 newState = LeaderboardList(self.game, 1)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level3":
+                newState = LeaderboardList(self.game, 2)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
@@ -152,8 +151,10 @@ class Leaderboards(GameState):
         self.level1Color, self.game.wndCenter[0], self.game.wndSize[1]*0.4)
         self.game.drawText(screen, "Main", "Level 2",
         self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
+        self.game.drawText(screen, "Main", "Level 3",
+        self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -163,12 +164,15 @@ class Leaderboards(GameState):
 
         self.level1Color = (255, 255, 255)
         self.level2Color = (255, 255, 255)
+        self.level3Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
         if self.menuIndex == 1:
             self.level2Color = (211, 81, 84)
         if self.menuIndex == 2:
+            self.level3Color = (211, 81, 84)
+        if self.menuIndex == 3:
             self.backColor = (211, 81, 84)
 
 class LeaderboardList(GameState):
@@ -226,10 +230,11 @@ class LevelSelect(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
+        self.level3Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -245,6 +250,10 @@ class LevelSelect(GameState):
                 self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 1)
                 newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level3":
+                self.game.resetCheckpointState()
+                newState = LevelTransition(self.game, 2)
+                newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
         self.game.resetKeysPressed()
@@ -257,8 +266,10 @@ class LevelSelect(GameState):
         self.level1Color, self.game.wndCenter[0], self.game.wndSize[1]*0.4)
         self.game.drawText(screen, "Main", "Level 2",
         self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
+        self.game.drawText(screen, "Main", "Level 3",
+        self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -268,12 +279,15 @@ class LevelSelect(GameState):
 
         self.level1Color = (255, 255, 255)
         self.level2Color = (255, 255, 255)
+        self.level3Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
         if self.menuIndex == 1:
             self.level2Color = (211, 81, 84)
         if self.menuIndex == 2:
+            self.level3Color = (211, 81, 84)
+        if self.menuIndex == 3:
             self.backColor = (211, 81, 84)
 
 # A loading buffer that creates all the tiles and players, and initializes
@@ -362,7 +376,7 @@ class Gameplay(GameState):
             self.game.checkpointMusicTime[-1])
 
     def update(self, keysPressed):
-        if keysPressed["enter"] and self.gameState == "NotStarted":
+        if self.gameState == "NotStarted":
             # Set the timer according to the BPM of the music
             # This makes sure countdown reaches 0 right before the circle
             # overlaps the next tile

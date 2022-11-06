@@ -25,12 +25,12 @@ class NeverEndingCircles:
         self.server = Server()
         self.username = None
         self.loggedin = False
-
+        """
         loginWindow(Tk(), self.server, self)
         
         if not self.loggedin:
             quit()
-
+        """
 
         # Set up display window to fullscreen
         self.wndSize = (

@@ -58,8 +58,40 @@ class Levels:
             "N01NtoE", "N01WtoE", "N01WtoN", "N01StoE", "N01WtoE", "N01WtoS",
             "N01NtoW", "N01EtoW"
         ]
+        self.level3 = [
+            "assets/music/level3.mp3", 150,
+            "assets/images/backgrounds/world3.jpg", 0,
+            "N01WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", 
+            "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoE", "N01WtoNE", 
+            "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE",
+            "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE",
+            "N01SWtoN", "N01StoE", "N02WtoE", "N01WtoNE", "N01SWtoN", "N01StoW",
+            "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE",
+            "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW",
+            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE", "N01WtoNE",
+            "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN",
+            "N01StoE", "N01WtoE", "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW",
+            "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoW", "N01EtoW", 
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW", 
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
+            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N01EtoW",
+            "S01050.00EtoW", "N03EtoW", "S01075.00EtoS", "N01NtoW", "N01EtoS",
+            "N01NtoW", "N02EtoW", "S01100.00EtoW", "N04EtoW", "N01EtoNW",
+            "N01SEtoW", "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE",
+            "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW",
+            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoS", "N01NtoW", "N01EtoW",
+            "N01EtoNW", "N01SEtoW", "N02EtoW", "N01EtoNW", "N01SEtoW", 
+            "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE",
+            "N01WtoNE", "N01SWtoE", "N01WtoN", "N01StoW", "N01EtoW"
+        ]
         # Stores all the level arrays
-        self.levels = [self.level1, self.level2]
+        self.levels = [self.level1, self.level2, self.level3]
         # Keep track of where the next tile should be placed
         self.nextTileCenter = [0,0]
 
@@ -95,6 +127,36 @@ class Levels:
                     self.nextTileCenter[1] += 100
                 if tile.split("to")[1] == "W":
                     self.nextTileCenter[0] += -100
+
+                if tile.split("to")[0][-2] == "NE" or \
+                tile.split("to")[0][-2] == "NW" or \
+                tile.split("to")[0][-2] == "SE" or \
+                tile.split("to")[0][-2] == "SW":
+                    if tile.split("to")[1] == "NE":
+                        self.nextTileCenter[0] += 120
+                        self.nextTileCenter[1] -= 120
+                    if tile.split("to")[1] == "NW":
+                        self.nextTileCenter[0] -= 120
+                        self.nextTileCenter[1] -= 120
+                    if tile.split("to")[1] == "SE":
+                        self.nextTileCenter[0] += 120
+                        self.nextTileCenter[1] += 120
+                    if tile.split("to")[1] == "SW":
+                        self.nextTileCenter[0] -= 120
+                        self.nextTileCenter[1] += 120
+
+                if tile.split("to")[1] == "NE":
+                    self.nextTileCenter[0] += 70
+                    self.nextTileCenter[1] -= 70
+                if tile.split("to")[1] == "NW":
+                    self.nextTileCenter[0] -= 70
+                    self.nextTileCenter[1] -= 70
+                if tile.split("to")[1] == "SE":
+                    self.nextTileCenter[0] += 70
+                    self.nextTileCenter[1] += 70
+                if tile.split("to")[1] == "SW":
+                    self.nextTileCenter[0] -= 70
+                    self.nextTileCenter[1] += 70
 
         # Return tiles sprite group, music file, BPM of the level, background
         # file and starting position of the background

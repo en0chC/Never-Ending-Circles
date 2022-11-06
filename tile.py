@@ -14,6 +14,7 @@ class Tile(pygame.sprite.Sprite):
     def __init__(self, wndCenter, pos, tileType, modifier, currentBPM):
         super().__init__()
         # Set up tile image, rect and modifier
+        print(tileType)
         self.image = pygame.image.load(
             "assets/images/" + tileType + ".png").convert_alpha()
         self.rect = self.image.get_rect(

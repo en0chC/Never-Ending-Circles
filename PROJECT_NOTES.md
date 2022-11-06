@@ -56,6 +56,7 @@ Updating Design Docs
 TP3:
 Writing code
 -	11:00am - 10:00pm
+-	5:00pm - 
 
 
 # TP2 Progress
@@ -91,8 +92,11 @@ Writing code
 
 # TP3 To Do
 -	Add 3 more levels
+-	Fix next tile center algorithm
 -	Particle effects
 -	Checkpoints - Fix music bug
+-	Citations in top of .py file
+-	Project Demo
 
 
 

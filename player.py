@@ -98,8 +98,12 @@ class Player(pygame.sprite.Sprite):
         # If modifier tile is speed change
         if nextTile.modifier == "S":
             # Calculate new rotations per second
-            self.rotationPerSecond = (((2*math.pi)/(self.FPS)) 
-            * (nextTile.modifierBPM/100))
+            if self.rotationPerSecond < 0:
+                self.rotationPerSecond = -(((2*math.pi)/(self.FPS)) 
+                * (nextTile.modifierBPM/100))
+            else:
+                self.rotationPerSecond = (((2*math.pi)/(self.FPS)) 
+                * (nextTile.modifierBPM/100))
         # If modifier tile is reverse direction
         if nextTile.modifier == "R":
             # Reverse direction of rotation
