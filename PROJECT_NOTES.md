@@ -93,8 +93,8 @@ Writing code
 # TP3 To Do
 -	Add 3 more levels
 -	Fix next tile center algorithm
--	Particle effects
 -	Checkpoints - Fix music bug
+-	Particle effects
 -	Citations in top of .py file
 -	Project Demo
 
