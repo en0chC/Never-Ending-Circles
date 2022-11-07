@@ -127,6 +127,16 @@ class Levels:
             "N01StoE", "N01WtoE"
         ]
         self.level5 = [
+            "assets/music/level5.mp3", 100,
+            "assets/images/backgrounds/world5.jpg", 0,
+            800,
+            "N03WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoW", "N03EtoW", 
+            "R01EtoW", "N02EtoW", "N01EtoNW", "N01SEtoNW", "N01SEtoE", 
+            "N01WtoE", "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE", "N01WtoE",
+            "N01WtoNE", "N01SWtoNE", "N01SWtoW", "N03EtoW", "R01EtoW", 
+            "N02EtoW", "N01EtoNW", "N01SEtoNW", "N01SEtoW", "N05EtoW", 
+            "N01EtoNW", "N01SEtoNW", "N01SEtoE", "N03WtoE", "R01WtoE", 
+            "N02WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoW", "N01EtoW",
             
         ]
         # Stores all the level arrays
