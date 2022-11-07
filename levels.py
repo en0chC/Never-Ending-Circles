@@ -24,9 +24,10 @@ class Levels:
         # Levels consist of music file name, BPM and level tiles
         self.level1 = [
             "assets/music/level1.mp3", 124, 
-            "assets/images/backgrounds/world1.jpg", 250,
+            "assets/images/backgrounds/world1.jpg", (0, 250),
             750,
-            "N31WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
+            "N10WtoE", "C01WtoE", "N10WtoE", "C01WtoE", "N09WtoE",
+            "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoS", "N01NtoE", 
             "N14WtoE", "N01WtoS", "N01NtoE", "N14WtoE", "N01WtoN", "N01StoE", 
             "N14WtoE", "N01WtoN", "N01StoE", "N05WtoE", "C01WtoE", "N06WtoE", 
             "N01WtoN", "N01StoE", "N01WtoN", "N01StoE", "N08WtoE", "N01WtoS", 
@@ -37,8 +38,43 @@ class Levels:
             "N06WtoE"
         ]
         self.level2 = [
-            "assets/music/level2.mp3", 149.5,
-            "assets/images/backgrounds/world2.jpg", 0,
+            "assets/music/level2.mp3", 69.5,
+            "assets/images/backgrounds/world2.jpg", (1000, 1800),
+            900,
+            "N01WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", 
+            "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", 
+            "N01WtoNE", "N01SWtoE", "N02WtoE",
+            "N01WtoNE", "N01SWtoN", "N01StoE", 
+            "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE", "N01WtoE", 
+            "N01WtoNE", "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE",
+            "N01SWtoN", "N01StoE", "N02WtoE", "N01WtoNE", "N01SWtoN", 
+            "N01StoW", "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", 
+            "N01WtoE", "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", 
+            "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE", 
+            "N01WtoNE","N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW", "N01EtoNW", 
+            "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE", "N01WtoNE", 
+            "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW", "N01EtoNW", 
+            "N01SEtoN", "N01StoW", "N01EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N02EtoW", "N01EtoNE", "N01SWtoSE", 
+            "N01NWtoS", "N01NtoW", "N01EtoW", "S01017.50EtoW", "N03EtoW", 
+            "S01034.30EtoS", "N01NtoW", "N01EtoS", "N01NtoW", "N02EtoW", 
+            "S01069.60EtoW", "N04EtoW", "N01EtoNW", "N01SEtoW", "N02EtoW", 
+            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE", 
+            "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW",
+            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoS", "N01NtoW", "N01EtoW",
+            "N01EtoNW", "N01SEtoW", "N02EtoW", "N01EtoNW", "N01SEtoW", 
+            "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE",
+            "N01WtoNE", "N01SWtoE", "N01WtoN", "N01StoW", "N01EtoW"
+        ]
+        self.level3 = [
+            "assets/music/level3.mp3", 150,
+            "assets/images/backgrounds/world3.jpg", (0, 0),
             600,
             "N29WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
             "N05WtoE", "N01WtoS", "N01NtoW", "N07EtoW", "N01EtoS", "N01NtoE",
@@ -61,43 +97,10 @@ class Levels:
             "N01NtoE", "N01WtoE", "N01WtoN", "N01StoE", "N01WtoE", "N01WtoS",
             "N01NtoW", "N01EtoW"
         ]
-        self.level3 = [
-            "assets/music/level3.mp3", 90,
-            "assets/images/backgrounds/world3.jpg", 400,
-            700,
-            "N01WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", 
-            "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoE", "N01WtoNE", 
-            "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE",
-            "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE",
-            "N01SWtoN", "N01StoE", "N02WtoE", "N01WtoNE", "N01SWtoN", "N01StoW",
-            "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE",
-            "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW",
-            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE", "N01WtoNE",
-            "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN",
-            "N01StoE", "N01WtoE", "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW",
-            "N01EtoW", "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoW", "N01EtoW", 
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW", 
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N02EtoW",
-            "N01EtoNE", "N01SWtoSE", "N01NWtoS", "N01NtoW", "N01EtoW",
-            "S01050.00EtoW", "N03EtoW", "S01075.00EtoS", "N01NtoW", "N01EtoS",
-            "N01NtoW", "N02EtoW", "S01100.00EtoW", "N04EtoW", "N01EtoNW",
-            "N01SEtoW", "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE",
-            "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoW", "N01EtoW", "R01EtoW",
-            "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoS", "N01NtoW", "N01EtoW",
-            "N01EtoNW", "N01SEtoW", "N02EtoW", "N01EtoNW", "N01SEtoW", 
-            "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE",
-            "N01WtoNE", "N01SWtoE", "N01WtoN", "N01StoW", "N01EtoW"
-        ]
         self.level4 = [
-            "assets/music/level4.mp3", 100,
-            "assets/images/backgrounds/world4.jpg", 0,
-            800,
+            "assets/music/level4.mp3", 131.8,
+            "assets/images/backgrounds/world4.jpg", (400, 0),
+            670,
             "N01WtoE", "N01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N02WtoE",
             "R01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N02WtoE", "R01WtoS",
             "N01NtoW", "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW",
@@ -106,13 +109,13 @@ class Levels:
             "N01EtoN", "N01StoE", "N01WtoS", "N01NtoW", "N03EtoW", "N01EtoS", 
             "N01NtoE", "N01WtoN", "N01StoW", "N03EtoW", "N01EtoS", "N01NtoE", 
             "N01WtoN", "N01StoW", "N03EtoW", "N01EtoS", "N02NtoS", "N01NtoE",
-            "N03WtoE", "S01080.00WtoE", "S01100.00WtoE", "N05WtoE", "N01WtoS",
+            "N03WtoE", "S01044.00WtoE", "S01132.10WtoE", "N05WtoE", "N01WtoS",
             "N01NtoW", "R01EtoS", "N01NtoE", "N06WtoE", "R01WtoS", "N01NtoW",
-            "N01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoN", 
+            "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoN", 
             "N01StoE", "N04WtoE", "N01WtoS", "N01NtoW", "N01EtoN", "N01StoE", 
             "N03WtoE", "N01WtoS", "N01NtoW", "N01EtoN", "N01StoE", "N01WtoS",
             "N03NtoS", "N01NtoW", "N01EtoN", "N01StoE", "N01WtoS", "N01NtoS",
-            "N01NtoW", "S01080.00EtoW", "S01100.00EtoS", "N01NtoE", "N01WtoS",
+            "N01NtoW", "S01044.00EtoW", "S01131.80EtoS", "N01NtoE", "R01WtoS",
             "N01NtoW", "N01EtoW", "N01EtoS", "N01NtoE", "N01WtoS", "N01NtoW",
             "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoS",
             "N01NtoE", "R01WtoS", "N01NtoW", "N01EtoW", "N01EtoS", "N01NtoE",
@@ -127,8 +130,8 @@ class Levels:
             "N01StoE", "N01WtoE"
         ]
         self.level5 = [
-            "assets/music/level5.mp3", 100,
-            "assets/images/backgrounds/world5.jpg", 0,
+            "assets/music/level5.mp3", 180,
+            "assets/images/backgrounds/world5.jpg", (0, 0),
             800,
             "N03WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoW", "N03EtoW", 
             "R01EtoW", "N02EtoW", "N01EtoNW", "N01SEtoNW", "N01SEtoE", 
@@ -137,7 +140,42 @@ class Levels:
             "N02EtoW", "N01EtoNW", "N01SEtoNW", "N01SEtoW", "N05EtoW", 
             "N01EtoNW", "N01SEtoNW", "N01SEtoE", "N03WtoE", "R01WtoE", 
             "N02WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoW", "N01EtoW",
-            
+            "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoW", "N01EtoW", 
+            "N01EtoNW", "N01SEtoNW", "N01SEtoE", "N02WtoE", "N01WtoSE",
+            "N01NWtoW", "N01EtoNW", "N01SEtoE", "N02WtoE", "R01WtoE", 
+            "N01WtoNE", "N01SWtoE", "N03WtoE", "N01WtoNE", "N01SWtoE",
+            "N03WtoE", "N01WtoNE", "N01SWtoN", "N01StoNE", "N01SWtoW",
+            "R01EtoW", "N01EtoNW", "N01SEtoN", "N01StoNW", "N01SEtoE",
+            "R01WtoE", "N01WtoNE", "N01SWtoN", "N01StoNE", "N01SWtoW",
+            "N03EtoW", "N01EtoNE", "N01SWtoE", "N11WtoE", "N01WtoS",
+            "N01NtoW", "N01EtoN", "N01StoE", "N04WtoE", "N01WtoNE", 
+            "N01SWtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", "N04SWtoNE",
+            "N01SWtoE", "N03WtoE", "N01WtoNE", "N01SWtoN", "N01StoNW", 
+            "N01SEtoNE", "N01SWtoE", "N01WtoE", "N01WtoNE", "N02SWtoNE",
+            "N01SWtoW", "N01EtoNE", "N03SWtoNE", "N01SWtoW", "N01EtoSW",
+            "N01NEtoE", "N01WtoNE", "N04SWtoNE", "N01SWtoE", "N08WtoE",
+            "N01WtoNE", "N01SWtoN", "N01StoNW", "N01SEtoW", "N01EtoNE",
+            "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoN", "N01StoNW", 
+            "N01SEtoW", "N01EtoNE", "N01SWtoE", "N01WtoE", "N01WtoSW",
+            "N01NEtoE", "N01WtoSW", "N01NEtoE", "N01WtoE", "N01WtoNE",
+            "N01SWtoNE", "N01SWtoE", "N01WtoSW", "N01NEtoE", "N01WtoSW",
+            "N01NEtoE", "N01WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoE",
+            "N01WtoSW", "N02NEtoSW", "N01NEtoW", "N01EtoSW", "N01NEtoS",
+            "N01NtoSE", "N01NWtoE", "N01WtoSW", "N02NEtoSW", "N01NEtoW", 
+            "N01EtoSW", "N01NEtoS", "N01NtoSE", "N01NWtoE", "N01WtoSW",
+            "N01NEtoE", "N01WtoSW", "N01NEtoE", "N01WtoSW", "N01NEtoE",
+            "N02WtoE", "N01WtoNE", "N01SWtoN", "N01StoNW", "N01SEtoW",
+            "N01EtoSW", "N01NEtoS", "N01NtoSE", "N01NWtoE", "N02WtoE",
+            "S01110.00WtoE", "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE",
+            "N02WtoE", "N01WtoNE", "N01SWtoE", "N01WtoNE", "N01SWtoE",
+            "N01WtoNE", "N01SWtoE", "N01WtoE", "N01WtoNE", "N01SWtoNE",
+            "N01SWtoE", "N01WtoE", "S01150.00WtoE", "N02WtoE", "N01WtoSW",
+            "N01NEtoE", "N01WtoSW", "N01NEtoE", "N01WtoE", "N01WtoNE", 
+            "N01SWtoN", "N01StoE", "N07WtoE", "N01WtoNE", "N01SWtoNE", 
+            "N01SWtoE", "N05WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoE",
+            "N05WtoE", "N01WtoNE", "N01SWtoNE", "N01SWtoE", "N01WtoE",
+            "N01WtoNE", "N01SWtoNE", "N01SWtoE", "N01WtoE", "N01WtoNE", 
+            "N02SWtoNE"
         ]
         # Stores all the level arrays
         self.levels = [self.level1, self.level2, self.level3, self.level4,
@@ -183,30 +221,30 @@ class Levels:
                 tile.split("to")[0][-2] == "SE" or \
                 tile.split("to")[0][-2] == "SW":
                     if tile.split("to")[1] == "NE":
-                        self.nextTileCenter[0] += 119
+                        self.nextTileCenter[0] += 120
                         self.nextTileCenter[1] -= 120
                     if tile.split("to")[1] == "NW":
-                        self.nextTileCenter[0] -= 119
+                        self.nextTileCenter[0] -= 120
                         self.nextTileCenter[1] -= 120
                     if tile.split("to")[1] == "SE":
-                        self.nextTileCenter[0] += 119
+                        self.nextTileCenter[0] += 120
                         self.nextTileCenter[1] += 120
                     if tile.split("to")[1] == "SW":
-                        self.nextTileCenter[0] -= 119
+                        self.nextTileCenter[0] -= 120
                         self.nextTileCenter[1] += 120
-
-                if tile.split("to")[1] == "NE":
-                    self.nextTileCenter[0] += 70
-                    self.nextTileCenter[1] -= 70
-                if tile.split("to")[1] == "NW":
-                    self.nextTileCenter[0] -= 70
-                    self.nextTileCenter[1] -= 70
-                if tile.split("to")[1] == "SE":
-                    self.nextTileCenter[0] += 70
-                    self.nextTileCenter[1] += 70
-                if tile.split("to")[1] == "SW":
-                    self.nextTileCenter[0] -= 70
-                    self.nextTileCenter[1] += 70
+                else:
+                    if tile.split("to")[1] == "NE":
+                        self.nextTileCenter[0] += 70
+                        self.nextTileCenter[1] -= 70
+                    if tile.split("to")[1] == "NW":
+                        self.nextTileCenter[0] -= 70
+                        self.nextTileCenter[1] -= 70
+                    if tile.split("to")[1] == "SE":
+                        self.nextTileCenter[0] += 70
+                        self.nextTileCenter[1] += 70
+                    if tile.split("to")[1] == "SW":
+                        self.nextTileCenter[0] -= 70
+                        self.nextTileCenter[1] += 70
 
         # Return tiles sprite group, music file, BPM of the level, background
         # file and starting position of the background

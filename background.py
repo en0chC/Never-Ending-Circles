@@ -15,4 +15,5 @@ class Background:
     def __init__(self, backgroundFile, startPos):
         self.image = pygame.image.load(backgroundFile)
         self.rect = self.image.get_rect()
-        self.rect.y -= startPos
+        self.rect.x -= startPos[0]
+        self.rect.y -= startPos[1]

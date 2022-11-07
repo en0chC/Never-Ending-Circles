@@ -570,7 +570,7 @@ class Gameplay(GameState):
                 # Add current music time so music can be played at
                 # appropriate point when starting from the checkpoint
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos() + 800)
+                self.startingCheckpoint + self.game.music.getPos())
             # Snap circle to tile, update the center of circular motion
             # of other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
@@ -578,6 +578,7 @@ class Gameplay(GameState):
             self.nextTileIndex += 1
             # Player has successfully pressed hit button on time
             self.passedTile = False
+            self.game.keysPressed["hit"] = False
         # Same as previous, just for orange circle
         elif pygame.sprite.collide_mask(orangeCircle, nextTile) and \
         self.game.invincible and \
@@ -598,11 +599,12 @@ class Gameplay(GameState):
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos() + 800)
+                self.startingCheckpoint + self.game.music.getPos())
             orangeCircle.snapToTile(nextTile)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
+            self.game.keysPressed["hit"] = False
 
         # If circle and tile masks colliding, circle is moving and
         # one of the hit keys were pressed
@@ -628,11 +630,12 @@ class Gameplay(GameState):
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos() + 800)
+                self.startingCheckpoint + self.game.music.getPos())
             blueCircle.snapToTile(nextTile)
             orangeCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
+            self.game.keysPressed["hit"] = False
         elif (pygame.sprite.collide_mask(orangeCircle, nextTile) and
         orangeCircle.moveState == "Move" and keysPressed["hit"]):
             # Determine score
@@ -655,11 +658,12 @@ class Gameplay(GameState):
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos() + 800)
+                self.startingCheckpoint + self.game.music.getPos())
             orangeCircle.snapToTile(nextTile)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
             self.passedTile = False
+            self.game.keysPressed["hit"] = False
 
         # Update camera offset relative to the fixed circle
         if blueCircle.moveState == "Fixed":

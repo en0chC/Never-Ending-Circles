@@ -10,12 +10,14 @@ in the levels. Class takes musicFile, file path to music file and timePos,
 time in the music file from which to start from.
 """
 #------------------------------------------------------------------------------
+import pygame
 import vlc
 
 class Music:
     def __init__(self, musicFile, timePos):
         # Set up music
         self.musicFile = musicFile
+        print(timePos)
         self.timePos = timePos
         # Set up vlc player
         self.instance = vlc.Instance()
@@ -28,6 +30,8 @@ class Music:
         self.player.stop()
 
     def startMusic(self):
+        print(self.timePos)
+        print(pygame.time.get_ticks())
         self.player.play()
         # Move to starting time
         self.player.set_time(int(self.timePos))
@@ -41,4 +45,4 @@ class Music:
             self.player.pause()
 
     def getPos(self):
-        return self.player.get_time() + 50
+        return self.player.get_time()
