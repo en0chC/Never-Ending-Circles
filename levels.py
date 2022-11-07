@@ -64,7 +64,7 @@ class Levels:
         self.level3 = [
             "assets/music/level3.mp3", 90,
             "assets/images/backgrounds/world3.jpg", 400,
-            150,
+            700,
             "N01WtoE", "N01WtoNE", "N01SWtoE", "N02WtoE", "N01WtoNE", 
             "N01SWtoE", "N02WtoE", "N01WtoNE", "N01SWtoE", "N01WtoNE", 
             "N01SWtoN", "N01StoE", "N01WtoE", "N01WtoNE", "N01SWtoN", "N01StoE",
@@ -94,8 +94,44 @@ class Levels:
             "N02EtoW", "N01EtoNW", "N01SEtoN", "N01StoE", "N01WtoE", "R01WtoE",
             "N01WtoNE", "N01SWtoE", "N01WtoN", "N01StoW", "N01EtoW"
         ]
+        self.level4 = [
+            "assets/music/level4.mp3", 100,
+            "assets/images/backgrounds/world4.jpg", 0,
+            800,
+            "N01WtoE", "N01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N02WtoE",
+            "R01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N02WtoE", "R01WtoS",
+            "N01NtoW", "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW",
+            "N01EtoS", "N01NtoE", "R01WtoS", "N01NtoW", "N01EtoS", "N01NtoW",
+            "N06EtoW", "N01EtoN", "N01StoE", "N01WtoS", "N01NtoW", "N06EtoW",
+            "N01EtoN", "N01StoE", "N01WtoS", "N01NtoW", "N03EtoW", "N01EtoS", 
+            "N01NtoE", "N01WtoN", "N01StoW", "N03EtoW", "N01EtoS", "N01NtoE", 
+            "N01WtoN", "N01StoW", "N03EtoW", "N01EtoS", "N02NtoS", "N01NtoE",
+            "N03WtoE", "S01080.00WtoE", "S01100.00WtoE", "N05WtoE", "N01WtoS",
+            "N01NtoW", "R01EtoS", "N01NtoE", "N06WtoE", "R01WtoS", "N01NtoW",
+            "N01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoN", 
+            "N01StoE", "N04WtoE", "N01WtoS", "N01NtoW", "N01EtoN", "N01StoE", 
+            "N03WtoE", "N01WtoS", "N01NtoW", "N01EtoN", "N01StoE", "N01WtoS",
+            "N03NtoS", "N01NtoW", "N01EtoN", "N01StoE", "N01WtoS", "N01NtoS",
+            "N01NtoW", "S01080.00EtoW", "S01100.00EtoS", "N01NtoE", "N01WtoS",
+            "N01NtoW", "N01EtoW", "N01EtoS", "N01NtoE", "N01WtoS", "N01NtoW",
+            "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoS",
+            "N01NtoE", "R01WtoS", "N01NtoW", "N01EtoW", "N01EtoS", "N01NtoE",
+            "N01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N01WtoS", "N01NtoE",
+            "R01WtoS", "N01NtoW", "R01EtoS", "N01NtoE", "N01WtoE", "N01WtoS",
+            "N01NtoW", "N01EtoS", "N01NtoE", "R01WtoS", "N01NtoW", "N01EtoW",
+            "N01EtoS", "N01NtoE", "N01WtoS", "N01NtoW", "R01EtoS", "N01NtoE",
+            "N01WtoE", "N01WtoS", "N01NtoW", "N01EtoS", "N01NtoE", "R01WtoS",
+            "N01NtoW", "N02EtoW", "N01EtoN", "N01StoE", "N01WtoS", "N02NtoS",
+            "N01NtoW", "N01EtoN", "N01StoE", "N01WtoS", "N01NtoS", "N01NtoW",
+            "N03EtoW", "N01EtoN", "N01StoE", "R01WtoN", "N01StoW", "R01EtoN",
+            "N01StoE", "N01WtoE"
+        ]
+        self.level5 = [
+            
+        ]
         # Stores all the level arrays
-        self.levels = [self.level1, self.level2, self.level3]
+        self.levels = [self.level1, self.level2, self.level3, self.level4,
+        self.level5]
         # Keep track of where the next tile should be placed
         self.nextTileCenter = [0,0]
 

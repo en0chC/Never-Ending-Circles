@@ -120,11 +120,14 @@ class Leaderboards(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Level3", "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Level5", 
+                            "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
+        self.level4Color = (255, 255, 255)
+        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -138,6 +141,12 @@ class Leaderboards(GameState):
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Level3":
                 newState = LeaderboardList(self.game, 2)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level4":
+                newState = LeaderboardList(self.game, 3)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level5":
+                newState = LeaderboardList(self.game, 4)
                 newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
@@ -153,8 +162,12 @@ class Leaderboards(GameState):
         self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
         self.game.drawText(screen, "Main", "Level 3",
         self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.game.drawText(screen, "Main", "Level 4",
+        self.level4Color, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
+        self.game.drawText(screen, "Main", "Level 5",
+        self.level5Color, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.9)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -165,6 +178,8 @@ class Leaderboards(GameState):
         self.level1Color = (255, 255, 255)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
+        self.level4Color = (255, 255, 255)
+        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
@@ -173,6 +188,10 @@ class Leaderboards(GameState):
         if self.menuIndex == 2:
             self.level3Color = (211, 81, 84)
         if self.menuIndex == 3:
+            self.level4Color = (211, 81, 84)
+        if self.menuIndex == 4:
+            self.level5Color = (211, 81, 84)
+        if self.menuIndex == 5:
             self.backColor = (211, 81, 84)
 
 class LeaderboardList(GameState):
@@ -230,11 +249,14 @@ class LevelSelect(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Level3", "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Level5", 
+                            "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
+        self.level4Color = (255, 255, 255)
+        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -254,6 +276,14 @@ class LevelSelect(GameState):
                 self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 2)
                 newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level4":
+                self.game.resetCheckpointState()
+                newState = LevelTransition(self.game, 3)
+                newState.nextState()
+            if self.menuOptions[self.menuIndex] == "Level5":
+                self.game.resetCheckpointState()
+                newState = LevelTransition(self.game, 4)
+                newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
         self.game.resetKeysPressed()
@@ -268,8 +298,12 @@ class LevelSelect(GameState):
         self.level2Color, self.game.wndCenter[0], self.game.wndSize[1]*0.5)
         self.game.drawText(screen, "Main", "Level 3",
         self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
+        self.game.drawText(screen, "Main", "Level 4",
+        self.level4Color, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
+        self.game.drawText(screen, "Main", "Level 5",
+        self.level5Color, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.9)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -280,6 +314,8 @@ class LevelSelect(GameState):
         self.level1Color = (255, 255, 255)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
+        self.level4Color = (255, 255, 255)
+        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
@@ -288,6 +324,10 @@ class LevelSelect(GameState):
         if self.menuIndex == 2:
             self.level3Color = (211, 81, 84)
         if self.menuIndex == 3:
+            self.level4Color = (211, 81, 84)
+        if self.menuIndex == 4:
+            self.level5Color = (211, 81, 84)
+        if self.menuIndex == 5:
             self.backColor = (211, 81, 84)
 
 # A loading buffer that creates all the tiles and players, and initializes
