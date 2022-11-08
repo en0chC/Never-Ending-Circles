@@ -5,7 +5,7 @@
 # Date Created : October 15th 2022
 #------------------------------------------------------------------------------
 """
-This module is the python file that will be run to starting the game.
+This module is the python file that will be run to start the game.
 """
 #------------------------------------------------------------------------------
 from neverEndingCircles import NeverEndingCircles

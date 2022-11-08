@@ -16,6 +16,8 @@ be a countdown timer and as soon as it reaches 0, the game starts.
 Be sure to start playing as soon as the timer reaches 0 as it is
 designed to reach 0 right before the circle starts overlapping
 the tiles.
+The keys "f", "j", "d" and "k" are the input keys that need to be 
+pressed when the circle overlaps the tile.
 At any time in a level (except during the countdown), press the
 escape key to open the pause menu where you can exit to the main
 menu and toggle "Invincible mode on or off.
@@ -24,3 +26,12 @@ onto the tiles without needing any player input. Note that the
 leaderboard will not be updated if you have turned on "Invincible"
 mode. If you wish to disable this feature to test server functions
 edit line 699 in the gameStates.py file.
+
+# How to install any needed libraries
+The libraries are included in the project files but if need be, 
+to install pygame and vlc, open up the command prompt and enter
+"pip install pygame" and "pip install python-vlc"
+
+# List of shortcut commands
+-	Escape key to open up the pause menu during a game
+-	r key to restart the level anytime while playing the level

@@ -93,8 +93,6 @@ Writing code
 
 
 # TP3 To Do
--	Project Demo
--	Time Sheet
 
 
 
