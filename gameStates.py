@@ -398,7 +398,6 @@ class Gameplay(GameState):
 
         # Initialize music and sound effects
         self.failSound = mixer.Sound("assets/sound/fail.mp3")
-        self.secondChanceSound = mixer.Sound("assets/sound/secondChance.mp3")
         self.musicFile = self.game.music.musicFile
         self.game.music = Music(self.musicFile, 
             self.game.checkpointMusicTime[-1])
