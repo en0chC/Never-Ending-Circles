@@ -25,6 +25,7 @@ class NeverEndingCircles:
         self.server = Server()
         self.username = None
         self.loggedin = False
+        
         """
         loginWindow(Tk(), self.server, self)
         
@@ -38,6 +39,8 @@ class NeverEndingCircles:
             pygame.display.Info().current_h)
         self.wndCenter = (self.wndSize[0]//2, self.wndSize[1]//2)
         self.screen = pygame.display.set_mode(self.wndSize, pygame.FULLSCREEN)
+        self.menuImage = pygame.image.load(
+            "assets/images/backgrounds/mainmenu.jpg")
         
         # Initialize the clock and countdown timer
         self.clock = pygame.time.Clock()

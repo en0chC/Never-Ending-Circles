@@ -25,7 +25,7 @@ class Tile(pygame.sprite.Sprite):
             "assets/images/" + tileType + ".png").convert_alpha()
         self.maskRect = self.image.get_rect(
             center=(wndCenter[0] + pos[0] - 50, wndCenter[1] + pos[1] - 50))
-        self.mask = pygame.mask.from_surface(self.maskImage).scale((100, 100))
+        self.mask = pygame.mask.from_surface(self.maskImage).scale((90, 90))
 
         # If modifier is change in speed
         if modifier[0] == "S":

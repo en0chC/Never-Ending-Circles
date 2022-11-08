@@ -23,6 +23,7 @@ from music import Music
 from player import Player
 from camera import Camera
 from background import Background
+from particles import Particle
 
 # Parent class that game state child classes inherit from
 class GameState:
@@ -54,6 +55,7 @@ class Title(GameState):
     # Draws any text and sprite specific to the game state onto the screen
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.menuImage, (0, 0))
         self.game.drawText(screen, "Title", "Never Ending Circles", 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndCenter[1])
 
@@ -87,6 +89,7 @@ class MainMenu(GameState):
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.menuImage, (0, 0))
         self.game.drawText(screen, "Title", "Never Ending Circles", 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
         self.game.drawText(screen, "Main", "Start",
@@ -120,14 +123,12 @@ class Leaderboards(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Level5", 
-                            "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
         self.level4Color = (255, 255, 255)
-        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -145,15 +146,13 @@ class Leaderboards(GameState):
             if self.menuOptions[self.menuIndex] == "Level4":
                 newState = LeaderboardList(self.game, 3)
                 newState.nextState()
-            if self.menuOptions[self.menuIndex] == "Level5":
-                newState = LeaderboardList(self.game, 4)
-                newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
         self.game.resetKeysPressed()
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.menuImage, (0, 0))
         self.game.drawText(screen, "Title", "Leaderboards", 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
         self.game.drawText(screen, "Main", "Level 1",
@@ -164,10 +163,8 @@ class Leaderboards(GameState):
         self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Level 4",
         self.level4Color, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
-        self.game.drawText(screen, "Main", "Level 5",
-        self.level5Color, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.9)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -179,7 +176,6 @@ class Leaderboards(GameState):
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
         self.level4Color = (255, 255, 255)
-        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
@@ -190,8 +186,6 @@ class Leaderboards(GameState):
         if self.menuIndex == 3:
             self.level4Color = (211, 81, 84)
         if self.menuIndex == 4:
-            self.level5Color = (211, 81, 84)
-        if self.menuIndex == 5:
             self.backColor = (211, 81, 84)
 
 class LeaderboardList(GameState):
@@ -210,6 +204,7 @@ class LeaderboardList(GameState):
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.menuImage, (0, 0))
         self.game.drawText(screen, "Title", "Level " + str(self.level + 1), 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
         for i in range(5):
@@ -249,14 +244,12 @@ class LevelSelect(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game = game
-        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Level5", 
-                            "Back"]
+        self.menuOptions = ["Level1", "Level2", "Level3", "Level4", "Back"]
         self.menuIndex = 0
         self.level1Color = (211, 81, 84)
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
         self.level4Color = (255, 255, 255)
-        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
     
     def update(self, keysPressed):
@@ -280,16 +273,13 @@ class LevelSelect(GameState):
                 self.game.resetCheckpointState()
                 newState = LevelTransition(self.game, 3)
                 newState.nextState()
-            if self.menuOptions[self.menuIndex] == "Level5":
-                self.game.resetCheckpointState()
-                newState = LevelTransition(self.game, 4)
-                newState.nextState()
             if self.menuOptions[self.menuIndex] == "Back":
                 self.game.stateStack.pop()
         self.game.resetKeysPressed()
 
     def render(self, screen):
         screen.fill((0, 0, 0))
+        screen.blit(self.game.menuImage, (0, 0))
         self.game.drawText(screen, "Title", "Level Select", 
         (255, 255, 255), self.game.wndCenter[0], self.game.wndSize[1]*0.2)
         self.game.drawText(screen, "Main", "Level 1",
@@ -300,10 +290,8 @@ class LevelSelect(GameState):
         self.level3Color, self.game.wndCenter[0], self.game.wndSize[1]*0.6)
         self.game.drawText(screen, "Main", "Level 4",
         self.level4Color, self.game.wndCenter[0], self.game.wndSize[1]*0.7)
-        self.game.drawText(screen, "Main", "Level 5",
-        self.level5Color, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
         self.game.drawText(screen, "Main", "Back",
-        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.9)
+        self.backColor, self.game.wndCenter[0], self.game.wndSize[1]*0.8)
 
     def updateSelected(self, keysPressed):
         if keysPressed["up"]:
@@ -315,7 +303,6 @@ class LevelSelect(GameState):
         self.level2Color = (255, 255, 255)
         self.level3Color = (255, 255, 255)
         self.level4Color = (255, 255, 255)
-        self.level5Color = (255, 255, 255)
         self.backColor = (255, 255, 255)
         if self.menuIndex == 0:
             self.level1Color = (211, 81, 84)
@@ -326,8 +313,6 @@ class LevelSelect(GameState):
         if self.menuIndex == 3:
             self.level4Color = (211, 81, 84)
         if self.menuIndex == 4:
-            self.level5Color = (211, 81, 84)
-        if self.menuIndex == 5:
             self.backColor = (211, 81, 84)
 
 # A loading buffer that creates all the tiles and players, and initializes
@@ -399,10 +384,12 @@ class Gameplay(GameState):
         self.gameState = "NotStarted"
         # Set starting tile and next tile according to latest checkpoint
         self.nextTileIndex = self.game.checkpoints[-1] + 1
-        self.startingCheckpoint = self.game.checkpoints[-1]
+        self.startingCheckpoint = self.game.checkpointMusicTime[-1]
         # Used to check if the circle is currently overlapping the tile
         self.passedTile = False
         self.turnedOnInvincible = False
+
+        self.particles = []
 
         # Initialize score variables
         self.score = self.game.checkpointScore[-1]
@@ -461,6 +448,16 @@ class Gameplay(GameState):
         # Draw the tiles, players and text onto the screen
         self.game.tiles.draw(screen)
         self.game.tiles.update(screen)
+
+        for i in range(30):
+            self.particles.append(Particle(self.game))
+        for particle in self.particles:
+            particle.timer -= 0.4
+            pygame.draw.circle(self.game.screen, particle.color, 
+            particle.loc, int(particle.timer))
+            if particle.timer <= 0:
+                self.particles.remove(particle)
+
         self.game.player.draw(screen)
         self.game.drawText(screen, "Main", "Score: " + str(int(self.score)),
         (255, 255, 255), self.game.wndCenter[0]*0.28, 
@@ -569,8 +566,7 @@ class Gameplay(GameState):
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
                 # Add current music time so music can be played at
                 # appropriate point when starting from the checkpoint
-                self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos())
+                self.game.checkpointMusicTime.append(self.game.music.getPos())
             # Snap circle to tile, update the center of circular motion
             # of other circle and set the other circle to start moving
             blueCircle.snapToTile(nextTile)
@@ -598,8 +594,7 @@ class Gameplay(GameState):
                 self.game.checkpointScore.append(self.score)
             if currentTile.modifier == "C" and \
             len(self.game.checkpoints) != len(self.game.checkpointMusicTime):
-                self.game.checkpointMusicTime.append(
-                self.startingCheckpoint + self.game.music.getPos())
+                self.game.checkpointMusicTime.append(self.game.music.getPos())
             orangeCircle.snapToTile(nextTile)
             blueCircle.moveState = "Move"
             self.nextTileIndex += 1
@@ -682,6 +677,10 @@ class Gameplay(GameState):
             # Move tile towards the center of the screen
             tile.rect.x += self.game.camera.offsetdx
             tile.rect.y += self.game.camera.offsetdy
+        for particle in self.particles:
+            x = particle.loc[0] + self.game.camera.offsetdx
+            y = particle.loc[1] + self.game.camera.offsetdy
+            particle.loc = (x, y)
         # Once final tile is reached, set game state to failed
         if self.nextTileIndex == len(self.game.tiles.sprites()):
             if not self.game.turnedOnInvincible:

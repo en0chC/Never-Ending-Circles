@@ -91,12 +91,10 @@ Writing code
 
 
 # TP3 To Do
--	Add 3 more levels
--	Fix next tile center algorithm
--	Checkpoints - Fix music bug
--	Particle effects
 -	Citations in top of .py file
+-	Comment Code
 -	Project Demo
+-	Update Project Proposal
 
 
 
@@ -104,6 +102,7 @@ Writing code
 -	Smooth camera
 -	Level backgrounds
 -	Added leaderboard functionality
+-	Level 3 and 4 added
 
 
 

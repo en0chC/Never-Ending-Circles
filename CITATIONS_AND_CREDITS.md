@@ -25,7 +25,8 @@ godoMaum - https://www.sandollcloud.com/font/16058.html?lang=en_US
 Unmasked BB - https://www.fontspace.com/unmasked-bb-font-f10132
 
 # Backgrounds
-World 1 - https://wallpaperaccess.com/wide-hd
-World 2 - http://wallpaperswide.com/outrun-wallpapers.html
-World 3 - https://wallpapercave.com/w/wp4472144
-World 4 - https://wallpapersden.com/purple-hysteresis-abstract-wallpaper/3440x1440/
+Main Menu - https://www.space.com/27600-around-a-star-system-space-wallpaper.html
+Level 1 - https://wallpaperaccess.com/wide-hd
+Level 2 - http://wallpaperswide.com/outrun-wallpapers.html
+Level 3 - https://wallpapercave.com/w/wp4472144
+Level 4 - https://wallpapersden.com/purple-hysteresis-abstract-wallpaper/3440x1440/
