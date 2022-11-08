@@ -58,7 +58,7 @@ Writing code
 -	11:00am - 10:00pm
 -	5:00pm - 8:00pm
 -	7:00pm - 2:00am
--	12:00pm - 
+-	12:00pm - 2:30pm
 
 
 # TP2 Progress
@@ -94,8 +94,6 @@ Writing code
 
 # TP3 To Do
 -	Project Demo
--	Update Project Proposal
--	README update
 -	Time Sheet
 
 
@@ -105,6 +103,8 @@ Writing code
 -	Level backgrounds
 -	Added leaderboard functionality
 -	Level 3 and 4 added
+-	Added menu background
+-	Added particle effects
 
 
 
@@ -112,3 +112,4 @@ Writing code
 -	Renamed game.py to neverEndingCircles.py
 -	background.py
 -	server.py
+-	particle.py

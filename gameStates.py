@@ -694,7 +694,7 @@ class Gameplay(GameState):
             x = particle.loc[0] + self.game.camera.offsetdx
             y = particle.loc[1] + self.game.camera.offsetdy
             particle.loc = (x, y)
-        # Once final tile is reached, set game state to failed
+        # Once final tile is reached, set game state to won
         if self.nextTileIndex == len(self.game.tiles.sprites()):
             if not self.game.turnedOnInvincible:
                 self.scoreUpdated = self.game.server.updateUserScore(
