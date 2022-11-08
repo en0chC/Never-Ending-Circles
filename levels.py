@@ -16,12 +16,14 @@ section with length "[1][2][6][1-2]to[1-2]". The different modifiers are
 """
 #------------------------------------------------------------------------------
 from tile import Tile
+#------------------------------------------------------------------------------
 
 class Levels:
     def __init__(self, wndCenter, currentLevel):
         self.wndCenter = wndCenter
         self.currentLevel = currentLevel
-        # Levels consist of music file name, BPM and level tiles
+        # Levels consist of music file name, BPM, background file, 
+        # background offset, countdown timer and sequence of level tiles
         self.level1 = [
             "assets/music/level1.mp3", 124, 
             "assets/images/backgrounds/world1.jpg", (0, 250),
@@ -131,7 +133,6 @@ class Levels:
             "N03EtoW", "N01EtoN", "N01StoE", "R01WtoN", "N01StoW", "R01EtoN",
             "N01StoE", "N01WtoE"
         ]
-
         # Stores all the level arrays
         self.levels = [self.level1, self.level2, self.level3, self.level4]
         # Keep track of where the next tile should be placed
@@ -170,6 +171,7 @@ class Levels:
                 if tile.split("to")[1] == "W":
                     self.nextTileCenter[0] += -100
 
+                # Tiles going diagonally
                 if tile.split("to")[0][-2] == "NE" or \
                 tile.split("to")[0][-2] == "NW" or \
                 tile.split("to")[0][-2] == "SE" or \
@@ -201,7 +203,7 @@ class Levels:
                         self.nextTileCenter[1] += 70
 
         # Return tiles sprite group, music file, BPM of the level, background
-        # file and starting position of the background
+        # file, starting position of the background and countdown time
         return tiles, self.levels[self.currentLevel][0], \
         self.levels[self.currentLevel][1], self.levels[self.currentLevel][2], \
         self.levels[self.currentLevel][3], self.levels[self.currentLevel][4]

@@ -4,12 +4,18 @@
 # Author : Enoch Luis S Catuncan
 # Date Created : November 5th 2022
 #------------------------------------------------------------------------------
+"""
+This module contains the Server class which handles all server interactions.
+"""
+#------------------------------------------------------------------------------
 import socket
 from tkinter import *
 from tkinter import messagebox
+#------------------------------------------------------------------------------
 
 class Server:
     def __init__(self):
+        # Connect to the server
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect(("86.36.42.136", 15112))
 
@@ -144,46 +150,50 @@ class Server:
 
     # This function gets the user's score for a specific level
     def getUserScore(self, username, level):
+        # Create the message for the server
         toServer = "@getuserscoresrqst@" + username
         size = str(len(toServer) + 6)
         while len(size) != 5:
             size = "0" + size
-
+        # Send the request message to the server
         self.socket.send(b"@" + size.encode("utf-8") + toServer.encode("utf-8"))
+        # Get the user scores from the server
         size = int(self.socket.recv(6).decode()[1:]) - 6
         userScores = self.socket.recv(size).decode()
         while size != len(userScores):
             userScores += self.socket.recv(size).decode()
 
+        # If nothing was returned from the server, return 0
         if size == 0:
             return size
         else:
+            # Return a list of the users
             userScores = userScores.split("@")[1:]
             return int(userScores[level + 1])
 
     # This function updates a user's score for a specific level
     def updateUserScore(self, username, level, score):
         newUserScores = []
+        # Get the users scores for each level
         for i in range(5):
             newUserScores += [self.getUserScore(username, i)]
-        newUserScores[level] = int(score)
+        # Update user score only if new score is larger than current score
+        if int(score) > newUserScores[level]:
+            newUserScores[level] = int(score)
+
+        # Construct message to the server
         toServer = "@updateuserscores@" + username + "@" + \
         str(newUserScores[0]) + "@" + str(newUserScores[1]) + "@" + \
         str(newUserScores[2]) + "@" + str(newUserScores[3]) + "@" + \
         str(newUserScores[4]) + "@"
-
-        print(toServer)
-
+        # Get size of the message
         size = str(len(toServer) + 6)
         while len(size) != 5:
             size = "0" + size
 
-        print("SENDING")
-
+        # Send update request to the server and return True if successful
         self.socket.send(b"@" + size.encode("utf-8") + toServer.encode("utf-8"))
-
-        print(self.socket.recv(1024).decode()[7:])
-        return "scoresupdated" == "scoresupdated" 
+        return self.socket.recv(1024).decode()[7:] == "scoresupdated" 
 
 # This class was copied and pasted from HW8
 class loginWindow:

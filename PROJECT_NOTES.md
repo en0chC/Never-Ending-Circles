@@ -58,6 +58,7 @@ Writing code
 -	11:00am - 10:00pm
 -	5:00pm - 8:00pm
 -	7:00pm - 2:00am
+-	12:00pm - 
 
 
 # TP2 Progress
@@ -92,8 +93,6 @@ Writing code
 
 
 # TP3 To Do
--	Citations in top of .py file
--	Comment Code
 -	Project Demo
 -	Update Project Proposal
 -	README update

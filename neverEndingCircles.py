@@ -5,8 +5,8 @@
 # Date Created : October 15th 2022
 #------------------------------------------------------------------------------
 """
-This module contains the main logic of the game and is what will be imported 
-by the __main__ file.
+This module contains the main logic and main loop of the game and is what will 
+be imported by the __main__ file.
 """
 #------------------------------------------------------------------------------
 from tkinter import Tk
@@ -15,6 +15,7 @@ import pygame
 #------------------------------------------------------------------------------
 from gameStates import Title
 from server import Server, loginWindow
+#------------------------------------------------------------------------------
 
 class NeverEndingCircles:
     def __init__(self):
@@ -22,26 +23,29 @@ class NeverEndingCircles:
         pygame.init()
         pygame.display.set_caption("Never Ending Circles")
 
+        # Initialize server capabilities and display the login window
         self.server = Server()
         self.username = None
         self.loggedin = False
         loginWindow(Tk(), self.server, self)
+        # Continue if logged in successfully
         if not self.loggedin:
             quit()
 
-        # Set up display window to fullscreen
-        self.wndSize = (
-            pygame.display.Info().current_w, 
+        # Set up display window to fullscreen and load main menu image
+        self.wndSize = (pygame.display.Info().current_w, 
             pygame.display.Info().current_h)
         self.wndCenter = (self.wndSize[0]//2, self.wndSize[1]//2)
         self.screen = pygame.display.set_mode(self.wndSize, pygame.FULLSCREEN)
         self.menuImage = pygame.image.load(
             "assets/images/backgrounds/mainmenu.jpg")
         
-        # Initialize the clock and countdown timer
+        # Initialize the variables dealing with time
         self.clock = pygame.time.Clock()
         self.FPS = 60
+        # Counter for the countdown when starting the level
         self.countdownCounter = 3
+        # Counter for resetting the pressed status of hit key
         self.counterTimer = None
 
         # Initialize variables used in Gameplay state (while running a level)
@@ -54,12 +58,14 @@ class NeverEndingCircles:
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
+
         # Initialize sprite groups for the players and tiles
         self.player = pygame.sprite.Group()
         self.tiles = pygame.sprite.Group()
 
         # Variable used to turn "Invincible" mode on or off
         self.invincible = False
+        # Keeps track of whether invincible mode was used
         self.turnedOnInvincible = False
         
         # Set up text fonts
@@ -108,6 +114,7 @@ class NeverEndingCircles:
                 if event.key == pygame.K_f or event.key == pygame.K_j or \
                 event.key == pygame.K_d or event.key == pygame.K_k:
                     self.keysPressed["hit"] = True
+                    # Start the timer for resetting the hit key
                     pygame.time.set_timer(pygame.USEREVENT + 1, 200)
                 if event.key == pygame.K_r:
                     self.keysPressed["r"] = True
@@ -128,6 +135,7 @@ class NeverEndingCircles:
             # Decrement countdown timer after specified amount of time
             if event.type == pygame.USEREVENT:
                 self.countdownCounter -= 1
+            # Set pressed state of hit key to false after timer tick
             if event.type == pygame.USEREVENT + 1:
                 self.keysPressed["hit"] = False
                 pygame.time.set_timer(pygame.USEREVENT + 1, 0)
@@ -147,11 +155,12 @@ class NeverEndingCircles:
     # Allows key inputs to be recognized only after initial press
     def resetKeysPressed(self):
         for key in self.keysPressed:
+            # Hit key has its own timer so don't reset it
             if key != "hit":
                 self.keysPressed[key] = False
 
     # Resets variables related to the running of a level
-    # Allows restarting of levels and loading other levels without rerunning
+    # Used when restarting and loading levels
     def resetLevelState(self):
         self.camera = None
         self.music = None
@@ -169,7 +178,3 @@ class NeverEndingCircles:
         self.checkpoints = [0]
         self.checkpointScore = [0]
         self.checkpointMusicTime = [0.0]
-
-# Temporary, used for convenience in testing
-if __name__ == "__main__":
-    NeverEndingCircles().mainLoop()

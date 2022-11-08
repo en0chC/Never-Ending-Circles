@@ -7,13 +7,14 @@
 """
 This module contains the Player sprite. The player class takes type, 
 windowSize, FPS and BPM as parameters. Type determines whether it is the blue 
-or red circle, windowSize is the size of the display window, FPS is the frames 
-per second and BPM is the Beats Per Minute.
+or orange circle, windowSize is the size of the display window, FPS is the 
+frames per second and BPM is the Beats Per Minute.
 """
 #------------------------------------------------------------------------------
 import math # Used for circular motion of circles
 #------------------------------------------------------------------------------
 import pygame
+#------------------------------------------------------------------------------
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, type, windowSize, FPS, BPM):
