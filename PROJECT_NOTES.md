@@ -56,7 +56,8 @@ Updating Design Docs
 TP3:
 Writing code
 -	11:00am - 10:00pm
--	5:00pm - 
+-	5:00pm - 8:00pm
+-	7:00pm - 2:00am
 
 
 # TP2 Progress
@@ -95,6 +96,8 @@ Writing code
 -	Comment Code
 -	Project Demo
 -	Update Project Proposal
+-	README update
+-	Time Sheet
 
 
 
